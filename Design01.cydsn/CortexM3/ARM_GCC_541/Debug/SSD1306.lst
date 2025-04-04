@@ -1,0 +1,1992 @@
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"SSD1306.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.SSD1306_Init,"ax",%progbits
+  20              		.align	2
+  21              		.global	SSD1306_Init
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	SSD1306_Init, %function
+  25              	SSD1306_Init:
+  26              	.LFB64:
+  27              		.file 1 "SSD1306.c"
+   1:SSD1306.c     **** #include "SSD1306.h"
+   2:SSD1306.c     **** #include "project.h"
+   3:SSD1306.c     **** #include "font8x8.h"
+   4:SSD1306.c     **** #include <stdio.h>
+   5:SSD1306.c     **** 
+   6:SSD1306.c     **** #define DISPLAY_ADDRESS 0x3C
+   7:SSD1306.c     **** #define SSD1306_WIDTH 128
+   8:SSD1306.c     **** #define SSD1306_HEIGHT 64
+   9:SSD1306.c     **** 
+  10:SSD1306.c     **** // Initialization commands for the OLED screen
+  11:SSD1306.c     **** static const uint8_t init_commands[] = {
+  12:SSD1306.c     ****     0xAE, // Turn off the display
+  13:SSD1306.c     ****     0xD5, 0x80, // Clock configuration
+  14:SSD1306.c     ****     0xA8, 0x3F, // Multiplexing
+  15:SSD1306.c     ****     0xD3, 0x00, // Display offset
+  16:SSD1306.c     ****     0x40, // Start line
+  17:SSD1306.c     ****     0x8D, 0x14, // Enable charge pump
+  18:SSD1306.c     ****     0x20, 0x00, // Horizontal addressing mode
+  19:SSD1306.c     ****     0xA1, // Segment remap
+  20:SSD1306.c     ****     0xC8, // COM output remap
+  21:SSD1306.c     ****     0xDA, 0x12, // COM configuration
+  22:SSD1306.c     ****     0x81, 0xCF, // Contrast control
+  23:SSD1306.c     ****     0xD9, 0xF1, // Pre-charge period
+  24:SSD1306.c     ****     0xDB, 0x40, // VCOMH deselect level
+  25:SSD1306.c     ****     0xA4, // Output all pixels off
+  26:SSD1306.c     ****     0xA6, // Normal display
+  27:SSD1306.c     ****     0xAF  // Turn on the display
+  28:SSD1306.c     **** };
+  29:SSD1306.c     **** 
+  30:SSD1306.c     **** // Global variables to store cursor position
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 2
+
+
+  31:SSD1306.c     **** uint8_t cursor_x = 0;
+  32:SSD1306.c     **** uint8_t cursor_y = 0;
+  33:SSD1306.c     **** 
+  34:SSD1306.c     **** void SSD1306_Init(void) {
+  28              		.loc 1 34 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  35:SSD1306.c     ****     I2C_Start(); // Initialize the I2C component
+  36              		.loc 1 35 0
+  37 0002 FFF7FEFF 		bl	I2C_Start
+  38              	.LVL0:
+  39              	.LBB2:
+  36:SSD1306.c     **** 
+  37:SSD1306.c     ****     for (uint8_t i = 0; i < sizeof(init_commands); i++) {
+  40              		.loc 1 37 0
+  41 0006 0024     		movs	r4, #0
+  42 0008 0EE0     		b	.L2
+  43              	.LVL1:
+  44              	.L3:
+  38:SSD1306.c     ****         I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+  45              		.loc 1 38 0 discriminator 3
+  46 000a 0021     		movs	r1, #0
+  47 000c 3C20     		movs	r0, #60
+  48 000e FFF7FEFF 		bl	I2C_MasterSendStart
+  49              	.LVL2:
+  39:SSD1306.c     ****         I2C_MasterWriteByte(0x00); // Command byte
+  50              		.loc 1 39 0 discriminator 3
+  51 0012 0020     		movs	r0, #0
+  52 0014 FFF7FEFF 		bl	I2C_MasterWriteByte
+  53              	.LVL3:
+  40:SSD1306.c     ****         I2C_MasterWriteByte(init_commands[i]); // Send the command
+  54              		.loc 1 40 0 discriminator 3
+  55 0018 054B     		ldr	r3, .L5
+  56 001a 185D     		ldrb	r0, [r3, r4]	@ zero_extendqisi2
+  57 001c FFF7FEFF 		bl	I2C_MasterWriteByte
+  58              	.LVL4:
+  41:SSD1306.c     ****         I2C_MasterSendStop();
+  59              		.loc 1 41 0 discriminator 3
+  60 0020 FFF7FEFF 		bl	I2C_MasterSendStop
+  61              	.LVL5:
+  37:SSD1306.c     ****         I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+  62              		.loc 1 37 0 discriminator 3
+  63 0024 0134     		adds	r4, r4, #1
+  64              	.LVL6:
+  65 0026 E4B2     		uxtb	r4, r4
+  66              	.LVL7:
+  67              	.L2:
+  37:SSD1306.c     ****         I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+  68              		.loc 1 37 0 is_stmt 0 discriminator 1
+  69 0028 182C     		cmp	r4, #24
+  70 002a EED9     		bls	.L3
+  71              	.LBE2:
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 3
+
+
+  42:SSD1306.c     ****     }
+  43:SSD1306.c     **** }
+  72              		.loc 1 43 0 is_stmt 1
+  73 002c 10BD     		pop	{r4, pc}
+  74              	.LVL8:
+  75              	.L6:
+  76 002e 00BF     		.align	2
+  77              	.L5:
+  78 0030 00000000 		.word	.LANCHOR0
+  79              		.cfi_endproc
+  80              	.LFE64:
+  81              		.size	SSD1306_Init, .-SSD1306_Init
+  82              		.section	.text.SSD1306_WriteChar,"ax",%progbits
+  83              		.align	2
+  84              		.global	SSD1306_WriteChar
+  85              		.thumb
+  86              		.thumb_func
+  87              		.type	SSD1306_WriteChar, %function
+  88              	SSD1306_WriteChar:
+  89              	.LFB66:
+  44:SSD1306.c     **** 
+  45:SSD1306.c     **** void SSD1306_Clear(void) {
+  46:SSD1306.c     ****     for (uint8_t page = 0; page < 8; page++) {
+  47:SSD1306.c     ****         SSD1306_SetCursor(0, page * 8);
+  48:SSD1306.c     ****         for (uint8_t col = 0; col < SSD1306_WIDTH; col++) {
+  49:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+  50:SSD1306.c     ****             I2C_MasterWriteByte(0x40); // Data byte
+  51:SSD1306.c     ****             I2C_MasterWriteByte(0x00); // Clear pixel
+  52:SSD1306.c     ****             I2C_MasterSendStop();
+  53:SSD1306.c     ****         }
+  54:SSD1306.c     ****     }
+  55:SSD1306.c     **** 	cursor_x = 0;
+  56:SSD1306.c     ****     cursor_y = 0;
+  57:SSD1306.c     **** }
+  58:SSD1306.c     **** 
+  59:SSD1306.c     **** void SSD1306_WriteChar(char c) {
+  90              		.loc 1 59 0
+  91              		.cfi_startproc
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  94              	.LVL9:
+  95 0000 38B5     		push	{r3, r4, r5, lr}
+  96              		.cfi_def_cfa_offset 16
+  97              		.cfi_offset 3, -16
+  98              		.cfi_offset 4, -12
+  99              		.cfi_offset 5, -8
+ 100              		.cfi_offset 14, -4
+  60:SSD1306.c     ****     if (c >= ' ' && c <= '~') { // Printable ASCII range
+ 101              		.loc 1 60 0
+ 102 0002 2038     		subs	r0, r0, #32
+ 103              	.LVL10:
+ 104 0004 C5B2     		uxtb	r5, r0
+ 105 0006 5E2D     		cmp	r5, #94
+ 106 0008 14D9     		bls	.L11
+ 107 000a 38BD     		pop	{r3, r4, r5, pc}
+ 108              	.LVL11:
+ 109              	.L10:
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 4
+
+
+ 110              	.LBB3:
+ 111              	.LBB4:
+  61:SSD1306.c     ****         uint8_t font_index = c - ' ';
+  62:SSD1306.c     ****         
+  63:SSD1306.c     ****         // Write character data
+  64:SSD1306.c     ****         for (uint8_t i = 0; i < FONT_WIDTH; i++) {
+  65:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 112              		.loc 1 65 0 discriminator 3
+ 113 000c 0021     		movs	r1, #0
+ 114 000e 3C20     		movs	r0, #60
+ 115 0010 FFF7FEFF 		bl	I2C_MasterSendStart
+ 116              	.LVL12:
+  66:SSD1306.c     ****             I2C_MasterWriteByte(0x40); // Data byte
+ 117              		.loc 1 66 0 discriminator 3
+ 118 0014 4020     		movs	r0, #64
+ 119 0016 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 120              	.LVL13:
+  67:SSD1306.c     ****             I2C_MasterWriteByte(font6x8[font_index * FONT_WIDTH + i]); // Font data
+ 121              		.loc 1 67 0 discriminator 3
+ 122 001a 05EB4502 		add	r2, r5, r5, lsl #1
+ 123 001e 5300     		lsls	r3, r2, #1
+ 124 0020 2344     		add	r3, r3, r4
+ 125 0022 0E4A     		ldr	r2, .L13
+ 126 0024 D05C     		ldrb	r0, [r2, r3]	@ zero_extendqisi2
+ 127 0026 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 128              	.LVL14:
+  68:SSD1306.c     ****             I2C_MasterSendStop();
+ 129              		.loc 1 68 0 discriminator 3
+ 130 002a FFF7FEFF 		bl	I2C_MasterSendStop
+ 131              	.LVL15:
+  64:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 132              		.loc 1 64 0 discriminator 3
+ 133 002e 0134     		adds	r4, r4, #1
+ 134              	.LVL16:
+ 135 0030 E4B2     		uxtb	r4, r4
+ 136              	.LVL17:
+ 137 0032 00E0     		b	.L8
+ 138              	.LVL18:
+ 139              	.L11:
+ 140              	.LBE4:
+ 141              	.LBE3:
+ 142 0034 0024     		movs	r4, #0
+ 143              	.L8:
+ 144              	.LVL19:
+ 145              	.LBB6:
+ 146              	.LBB5:
+  64:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 147              		.loc 1 64 0 is_stmt 0 discriminator 1
+ 148 0036 052C     		cmp	r4, #5
+ 149 0038 E8D9     		bls	.L10
+ 150              	.LBE5:
+  69:SSD1306.c     ****         }
+  70:SSD1306.c     **** 
+  71:SSD1306.c     ****         // Add a space after the character
+  72:SSD1306.c     ****         I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 151              		.loc 1 72 0 is_stmt 1
+ 152 003a 0021     		movs	r1, #0
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 5
+
+
+ 153 003c 3C20     		movs	r0, #60
+ 154 003e FFF7FEFF 		bl	I2C_MasterSendStart
+ 155              	.LVL20:
+  73:SSD1306.c     ****         I2C_MasterWriteByte(0x40);
+ 156              		.loc 1 73 0
+ 157 0042 4020     		movs	r0, #64
+ 158 0044 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 159              	.LVL21:
+  74:SSD1306.c     ****         I2C_MasterWriteByte(0x00); // Space column
+ 160              		.loc 1 74 0
+ 161 0048 0020     		movs	r0, #0
+ 162 004a FFF7FEFF 		bl	I2C_MasterWriteByte
+ 163              	.LVL22:
+  75:SSD1306.c     ****         I2C_MasterSendStop();
+ 164              		.loc 1 75 0
+ 165 004e FFF7FEFF 		bl	I2C_MasterSendStop
+ 166              	.LVL23:
+  76:SSD1306.c     **** 
+  77:SSD1306.c     ****         cursor_x += FONT_WIDTH + 1; // Move cursor
+ 167              		.loc 1 77 0
+ 168 0052 034A     		ldr	r2, .L13+4
+ 169 0054 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 170 0056 0733     		adds	r3, r3, #7
+ 171 0058 1370     		strb	r3, [r2]
+ 172 005a 38BD     		pop	{r3, r4, r5, pc}
+ 173              	.LVL24:
+ 174              	.L14:
+ 175              		.align	2
+ 176              	.L13:
+ 177 005c 00000000 		.word	font6x8
+ 178 0060 00000000 		.word	.LANCHOR1
+ 179              	.LBE6:
+ 180              		.cfi_endproc
+ 181              	.LFE66:
+ 182              		.size	SSD1306_WriteChar, .-SSD1306_WriteChar
+ 183              		.section	.text.SSD1306_WriteString,"ax",%progbits
+ 184              		.align	2
+ 185              		.global	SSD1306_WriteString
+ 186              		.thumb
+ 187              		.thumb_func
+ 188              		.type	SSD1306_WriteString, %function
+ 189              	SSD1306_WriteString:
+ 190              	.LFB67:
+  78:SSD1306.c     ****     }
+  79:SSD1306.c     **** }
+  80:SSD1306.c     **** 
+  81:SSD1306.c     **** void SSD1306_WriteString(const char *str) {
+ 191              		.loc 1 81 0
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195              	.LVL25:
+ 196 0000 10B5     		push	{r4, lr}
+ 197              		.cfi_def_cfa_offset 8
+ 198              		.cfi_offset 4, -8
+ 199              		.cfi_offset 14, -4
+ 200 0002 0446     		mov	r4, r0
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 6
+
+
+  82:SSD1306.c     ****     while (*str) {
+ 201              		.loc 1 82 0
+ 202 0004 02E0     		b	.L16
+ 203              	.LVL26:
+ 204              	.L17:
+  83:SSD1306.c     ****         SSD1306_WriteChar(*str++);
+ 205              		.loc 1 83 0
+ 206 0006 0134     		adds	r4, r4, #1
+ 207              	.LVL27:
+ 208 0008 FFF7FEFF 		bl	SSD1306_WriteChar
+ 209              	.LVL28:
+ 210              	.L16:
+  82:SSD1306.c     ****     while (*str) {
+ 211              		.loc 1 82 0
+ 212 000c 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 213 000e 0028     		cmp	r0, #0
+ 214 0010 F9D1     		bne	.L17
+  84:SSD1306.c     ****     }
+  85:SSD1306.c     **** }
+ 215              		.loc 1 85 0
+ 216 0012 10BD     		pop	{r4, pc}
+ 217              		.cfi_endproc
+ 218              	.LFE67:
+ 219              		.size	SSD1306_WriteString, .-SSD1306_WriteString
+ 220              		.section	.text.SSD1306_SetCursor,"ax",%progbits
+ 221              		.align	2
+ 222              		.global	SSD1306_SetCursor
+ 223              		.thumb
+ 224              		.thumb_func
+ 225              		.type	SSD1306_SetCursor, %function
+ 226              	SSD1306_SetCursor:
+ 227              	.LFB68:
+  86:SSD1306.c     **** 
+  87:SSD1306.c     **** void SSD1306_SetCursor(uint8_t x, uint8_t y) {
+ 228              		.loc 1 87 0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232              	.LVL29:
+ 233 0000 38B5     		push	{r3, r4, r5, lr}
+ 234              		.cfi_def_cfa_offset 16
+ 235              		.cfi_offset 3, -16
+ 236              		.cfi_offset 4, -12
+ 237              		.cfi_offset 5, -8
+ 238              		.cfi_offset 14, -4
+  88:SSD1306.c     ****     uint8_t command1, command2;
+  89:SSD1306.c     ****     command1 = 0xb0 + (y / 8);
+ 239              		.loc 1 89 0
+ 240 0002 C908     		lsrs	r1, r1, #3
+ 241              	.LVL30:
+ 242 0004 A1F15004 		sub	r4, r1, #80
+ 243 0008 E4B2     		uxtb	r4, r4
+ 244              	.LVL31:
+  90:SSD1306.c     ****     command2 = ((x & 0x0f));
+ 245              		.loc 1 90 0
+ 246 000a 00F00F05 		and	r5, r0, #15
+ 247              	.LVL32:
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 7
+
+
+  91:SSD1306.c     ****     I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 248              		.loc 1 91 0
+ 249 000e 0021     		movs	r1, #0
+ 250 0010 3C20     		movs	r0, #60
+ 251              	.LVL33:
+ 252 0012 FFF7FEFF 		bl	I2C_MasterSendStart
+ 253              	.LVL34:
+  92:SSD1306.c     ****     I2C_MasterWriteByte(0x00); // Command byte
+ 254              		.loc 1 92 0
+ 255 0016 0020     		movs	r0, #0
+ 256 0018 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 257              	.LVL35:
+  93:SSD1306.c     ****     I2C_MasterWriteByte(command1);
+ 258              		.loc 1 93 0
+ 259 001c 2046     		mov	r0, r4
+ 260 001e FFF7FEFF 		bl	I2C_MasterWriteByte
+ 261              	.LVL36:
+  94:SSD1306.c     **** 	I2C_MasterSendStop();
+ 262              		.loc 1 94 0
+ 263 0022 FFF7FEFF 		bl	I2C_MasterSendStop
+ 264              	.LVL37:
+  95:SSD1306.c     **** 	
+  96:SSD1306.c     **** 	I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 265              		.loc 1 96 0
+ 266 0026 0021     		movs	r1, #0
+ 267 0028 3C20     		movs	r0, #60
+ 268 002a FFF7FEFF 		bl	I2C_MasterSendStart
+ 269              	.LVL38:
+  97:SSD1306.c     ****     I2C_MasterWriteByte(0x00); // Command byte
+ 270              		.loc 1 97 0
+ 271 002e 0020     		movs	r0, #0
+ 272 0030 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 273              	.LVL39:
+  98:SSD1306.c     ****     I2C_MasterWriteByte(0x00 + command2);
+ 274              		.loc 1 98 0
+ 275 0034 2846     		mov	r0, r5
+ 276 0036 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 277              	.LVL40:
+  99:SSD1306.c     ****     I2C_MasterSendStop();
+ 278              		.loc 1 99 0
+ 279 003a FFF7FEFF 		bl	I2C_MasterSendStop
+ 280              	.LVL41:
+ 100:SSD1306.c     **** 	
+ 101:SSD1306.c     **** 	I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 281              		.loc 1 101 0
+ 282 003e 0021     		movs	r1, #0
+ 283 0040 3C20     		movs	r0, #60
+ 284 0042 FFF7FEFF 		bl	I2C_MasterSendStart
+ 285              	.LVL42:
+ 102:SSD1306.c     ****     I2C_MasterWriteByte(0x00); // Command byte
+ 286              		.loc 1 102 0
+ 287 0046 0020     		movs	r0, #0
+ 288 0048 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 289              	.LVL43:
+ 103:SSD1306.c     ****     I2C_MasterWriteByte(0x10);
+ 290              		.loc 1 103 0
+ 291 004c 1020     		movs	r0, #16
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 8
+
+
+ 292 004e FFF7FEFF 		bl	I2C_MasterWriteByte
+ 293              	.LVL44:
+ 104:SSD1306.c     ****     I2C_MasterSendStop();	
+ 294              		.loc 1 104 0
+ 295 0052 FFF7FEFF 		bl	I2C_MasterSendStop
+ 296              	.LVL45:
+ 297 0056 38BD     		pop	{r3, r4, r5, pc}
+ 298              		.cfi_endproc
+ 299              	.LFE68:
+ 300              		.size	SSD1306_SetCursor, .-SSD1306_SetCursor
+ 301              		.section	.text.SSD1306_Clear,"ax",%progbits
+ 302              		.align	2
+ 303              		.global	SSD1306_Clear
+ 304              		.thumb
+ 305              		.thumb_func
+ 306              		.type	SSD1306_Clear, %function
+ 307              	SSD1306_Clear:
+ 308              	.LFB65:
+  45:SSD1306.c     ****     for (uint8_t page = 0; page < 8; page++) {
+ 309              		.loc 1 45 0
+ 310              		.cfi_startproc
+ 311              		@ args = 0, pretend = 0, frame = 0
+ 312              		@ frame_needed = 0, uses_anonymous_args = 0
+ 313 0000 38B5     		push	{r3, r4, r5, lr}
+ 314              		.cfi_def_cfa_offset 16
+ 315              		.cfi_offset 3, -16
+ 316              		.cfi_offset 4, -12
+ 317              		.cfi_offset 5, -8
+ 318              		.cfi_offset 14, -4
+ 319              	.LVL46:
+ 320              	.LBB7:
+  46:SSD1306.c     ****         SSD1306_SetCursor(0, page * 8);
+ 321              		.loc 1 46 0
+ 322 0002 0025     		movs	r5, #0
+ 323 0004 1AE0     		b	.L22
+ 324              	.LVL47:
+ 325              	.L25:
+  47:SSD1306.c     ****         for (uint8_t col = 0; col < SSD1306_WIDTH; col++) {
+ 326              		.loc 1 47 0
+ 327 0006 E900     		lsls	r1, r5, #3
+ 328 0008 01F0F801 		and	r1, r1, #248
+ 329 000c 0020     		movs	r0, #0
+ 330 000e FFF7FEFF 		bl	SSD1306_SetCursor
+ 331              	.LVL48:
+ 332              	.LBB8:
+  48:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 333              		.loc 1 48 0
+ 334 0012 0024     		movs	r4, #0
+ 335 0014 0DE0     		b	.L23
+ 336              	.LVL49:
+ 337              	.L24:
+  49:SSD1306.c     ****             I2C_MasterWriteByte(0x40); // Data byte
+ 338              		.loc 1 49 0 discriminator 3
+ 339 0016 0021     		movs	r1, #0
+ 340 0018 3C20     		movs	r0, #60
+ 341 001a FFF7FEFF 		bl	I2C_MasterSendStart
+ 342              	.LVL50:
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 9
+
+
+  50:SSD1306.c     ****             I2C_MasterWriteByte(0x00); // Clear pixel
+ 343              		.loc 1 50 0 discriminator 3
+ 344 001e 4020     		movs	r0, #64
+ 345 0020 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 346              	.LVL51:
+  51:SSD1306.c     ****             I2C_MasterSendStop();
+ 347              		.loc 1 51 0 discriminator 3
+ 348 0024 0020     		movs	r0, #0
+ 349 0026 FFF7FEFF 		bl	I2C_MasterWriteByte
+ 350              	.LVL52:
+  52:SSD1306.c     ****         }
+ 351              		.loc 1 52 0 discriminator 3
+ 352 002a FFF7FEFF 		bl	I2C_MasterSendStop
+ 353              	.LVL53:
+  48:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 354              		.loc 1 48 0 discriminator 3
+ 355 002e 0134     		adds	r4, r4, #1
+ 356              	.LVL54:
+ 357 0030 E4B2     		uxtb	r4, r4
+ 358              	.LVL55:
+ 359              	.L23:
+  48:SSD1306.c     ****             I2C_MasterSendStart(DISPLAY_ADDRESS, I2C_WRITE_XFER_MODE);
+ 360              		.loc 1 48 0 is_stmt 0 discriminator 1
+ 361 0032 14F0800F 		tst	r4, #128
+ 362 0036 EED0     		beq	.L24
+ 363              	.LBE8:
+  46:SSD1306.c     ****         SSD1306_SetCursor(0, page * 8);
+ 364              		.loc 1 46 0 is_stmt 1 discriminator 2
+ 365 0038 0135     		adds	r5, r5, #1
+ 366              	.LVL56:
+ 367 003a EDB2     		uxtb	r5, r5
+ 368              	.LVL57:
+ 369              	.L22:
+  46:SSD1306.c     ****         SSD1306_SetCursor(0, page * 8);
+ 370              		.loc 1 46 0 is_stmt 0 discriminator 1
+ 371 003c 072D     		cmp	r5, #7
+ 372 003e E2D9     		bls	.L25
+ 373              	.LBE7:
+  55:SSD1306.c     ****     cursor_y = 0;
+ 374              		.loc 1 55 0 is_stmt 1
+ 375 0040 024B     		ldr	r3, .L27
+ 376 0042 0022     		movs	r2, #0
+ 377 0044 1A70     		strb	r2, [r3]
+  56:SSD1306.c     **** }
+ 378              		.loc 1 56 0
+ 379 0046 5A70     		strb	r2, [r3, #1]
+ 380 0048 38BD     		pop	{r3, r4, r5, pc}
+ 381              	.LVL58:
+ 382              	.L28:
+ 383 004a 00BF     		.align	2
+ 384              	.L27:
+ 385 004c 00000000 		.word	.LANCHOR1
+ 386              		.cfi_endproc
+ 387              	.LFE65:
+ 388              		.size	SSD1306_Clear, .-SSD1306_Clear
+ 389              		.global	cursor_y
+ 390              		.global	cursor_x
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 10
+
+
+ 391              		.section	.rodata
+ 392              		.align	2
+ 393              		.set	.LANCHOR0,. + 0
+ 394              		.type	init_commands, %object
+ 395              		.size	init_commands, 25
+ 396              	init_commands:
+ 397 0000 AE       		.byte	-82
+ 398 0001 D5       		.byte	-43
+ 399 0002 80       		.byte	-128
+ 400 0003 A8       		.byte	-88
+ 401 0004 3F       		.byte	63
+ 402 0005 D3       		.byte	-45
+ 403 0006 00       		.byte	0
+ 404 0007 40       		.byte	64
+ 405 0008 8D       		.byte	-115
+ 406 0009 14       		.byte	20
+ 407 000a 20       		.byte	32
+ 408 000b 00       		.byte	0
+ 409 000c A1       		.byte	-95
+ 410 000d C8       		.byte	-56
+ 411 000e DA       		.byte	-38
+ 412 000f 12       		.byte	18
+ 413 0010 81       		.byte	-127
+ 414 0011 CF       		.byte	-49
+ 415 0012 D9       		.byte	-39
+ 416 0013 F1       		.byte	-15
+ 417 0014 DB       		.byte	-37
+ 418 0015 40       		.byte	64
+ 419 0016 A4       		.byte	-92
+ 420 0017 A6       		.byte	-90
+ 421 0018 AF       		.byte	-81
+ 422              		.bss
+ 423              		.set	.LANCHOR1,. + 0
+ 424              		.type	cursor_x, %object
+ 425              		.size	cursor_x, 1
+ 426              	cursor_x:
+ 427 0000 00       		.space	1
+ 428              		.type	cursor_y, %object
+ 429              		.size	cursor_y, 1
+ 430              	cursor_y:
+ 431 0001 00       		.space	1
+ 432              		.text
+ 433              	.Letext0:
+ 434              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 435              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 436              		.file 4 "Generated_Source\\PSoC5/core_cm3.h"
+ 437              		.file 5 "font8x8.h"
+ 438              		.file 6 "Generated_Source\\PSoC5/I2C.h"
+ 439              		.section	.debug_info,"",%progbits
+ 440              	.Ldebug_info0:
+ 441 0000 C6040000 		.4byte	0x4c6
+ 442 0004 0400     		.2byte	0x4
+ 443 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 444 000a 04       		.byte	0x4
+ 445 000b 01       		.uleb128 0x1
+ 446 000c 8F000000 		.4byte	.LASF35
+ 447 0010 0C       		.byte	0xc
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 11
+
+
+ 448 0011 71000000 		.4byte	.LASF36
+ 449 0015 63010000 		.4byte	.LASF37
+ 450 0019 30000000 		.4byte	.Ldebug_ranges0+0x30
+ 451 001d 00000000 		.4byte	0
+ 452 0021 00000000 		.4byte	.Ldebug_line0
+ 453 0025 02       		.uleb128 0x2
+ 454 0026 01       		.byte	0x1
+ 455 0027 06       		.byte	0x6
+ 456 0028 B4020000 		.4byte	.LASF0
+ 457 002c 03       		.uleb128 0x3
+ 458 002d 12000000 		.4byte	.LASF4
+ 459 0031 02       		.byte	0x2
+ 460 0032 1D       		.byte	0x1d
+ 461 0033 37000000 		.4byte	0x37
+ 462 0037 02       		.uleb128 0x2
+ 463 0038 01       		.byte	0x1
+ 464 0039 08       		.byte	0x8
+ 465 003a 81000000 		.4byte	.LASF1
+ 466 003e 02       		.uleb128 0x2
+ 467 003f 02       		.byte	0x2
+ 468 0040 05       		.byte	0x5
+ 469 0041 79020000 		.4byte	.LASF2
+ 470 0045 02       		.uleb128 0x2
+ 471 0046 02       		.byte	0x2
+ 472 0047 07       		.byte	0x7
+ 473 0048 4C000000 		.4byte	.LASF3
+ 474 004c 03       		.uleb128 0x3
+ 475 004d 2E000000 		.4byte	.LASF5
+ 476 0051 02       		.byte	0x2
+ 477 0052 3F       		.byte	0x3f
+ 478 0053 57000000 		.4byte	0x57
+ 479 0057 02       		.uleb128 0x2
+ 480 0058 04       		.byte	0x4
+ 481 0059 05       		.byte	0x5
+ 482 005a 96020000 		.4byte	.LASF6
+ 483 005e 02       		.uleb128 0x2
+ 484 005f 04       		.byte	0x4
+ 485 0060 07       		.byte	0x7
+ 486 0061 1D010000 		.4byte	.LASF7
+ 487 0065 02       		.uleb128 0x2
+ 488 0066 08       		.byte	0x8
+ 489 0067 05       		.byte	0x5
+ 490 0068 58020000 		.4byte	.LASF8
+ 491 006c 02       		.uleb128 0x2
+ 492 006d 08       		.byte	0x8
+ 493 006e 07       		.byte	0x7
+ 494 006f 28020000 		.4byte	.LASF9
+ 495 0073 04       		.uleb128 0x4
+ 496 0074 04       		.byte	0x4
+ 497 0075 05       		.byte	0x5
+ 498 0076 696E7400 		.ascii	"int\000"
+ 499 007a 02       		.uleb128 0x2
+ 500 007b 04       		.byte	0x4
+ 501 007c 07       		.byte	0x7
+ 502 007d 1B020000 		.4byte	.LASF10
+ 503 0081 03       		.uleb128 0x3
+ 504 0082 3F020000 		.4byte	.LASF11
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 12
+
+
+ 505 0086 03       		.byte	0x3
+ 506 0087 18       		.byte	0x18
+ 507 0088 2C000000 		.4byte	0x2c
+ 508 008c 03       		.uleb128 0x3
+ 509 008d 47020000 		.4byte	.LASF12
+ 510 0091 03       		.byte	0x3
+ 511 0092 2C       		.byte	0x2c
+ 512 0093 4C000000 		.4byte	0x4c
+ 513 0097 02       		.uleb128 0x2
+ 514 0098 04       		.byte	0x4
+ 515 0099 04       		.byte	0x4
+ 516 009a 7B000000 		.4byte	.LASF13
+ 517 009e 02       		.uleb128 0x2
+ 518 009f 08       		.byte	0x8
+ 519 00a0 04       		.byte	0x4
+ 520 00a1 5C010000 		.4byte	.LASF14
+ 521 00a5 02       		.uleb128 0x2
+ 522 00a6 01       		.byte	0x1
+ 523 00a7 08       		.byte	0x8
+ 524 00a8 66020000 		.4byte	.LASF15
+ 525 00ac 02       		.uleb128 0x2
+ 526 00ad 08       		.byte	0x8
+ 527 00ae 04       		.byte	0x4
+ 528 00af A8020000 		.4byte	.LASF16
+ 529 00b3 02       		.uleb128 0x2
+ 530 00b4 04       		.byte	0x4
+ 531 00b5 07       		.byte	0x7
+ 532 00b6 4F020000 		.4byte	.LASF17
+ 533 00ba 05       		.uleb128 0x5
+ 534 00bb 04       		.byte	0x4
+ 535 00bc C0000000 		.4byte	0xc0
+ 536 00c0 06       		.uleb128 0x6
+ 537 00c1 A5000000 		.4byte	0xa5
+ 538 00c5 07       		.uleb128 0x7
+ 539 00c6 05000000 		.4byte	.LASF18
+ 540 00ca 01       		.byte	0x1
+ 541 00cb 22       		.byte	0x22
+ 542 00cc 00000000 		.4byte	.LFB64
+ 543 00d0 34000000 		.4byte	.LFE64-.LFB64
+ 544 00d4 01       		.uleb128 0x1
+ 545 00d5 9C       		.byte	0x9c
+ 546 00d6 50010000 		.4byte	0x150
+ 547 00da 08       		.uleb128 0x8
+ 548 00db 06000000 		.4byte	.LBB2
+ 549 00df 26000000 		.4byte	.LBE2-.LBB2
+ 550 00e3 46010000 		.4byte	0x146
+ 551 00e7 09       		.uleb128 0x9
+ 552 00e8 6900     		.ascii	"i\000"
+ 553 00ea 01       		.byte	0x1
+ 554 00eb 25       		.byte	0x25
+ 555 00ec 81000000 		.4byte	0x81
+ 556 00f0 00000000 		.4byte	.LLST0
+ 557 00f4 0A       		.uleb128 0xa
+ 558 00f5 12000000 		.4byte	.LVL2
+ 559 00f9 9D040000 		.4byte	0x49d
+ 560 00fd 0D010000 		.4byte	0x10d
+ 561 0101 0B       		.uleb128 0xb
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 13
+
+
+ 562 0102 01       		.uleb128 0x1
+ 563 0103 50       		.byte	0x50
+ 564 0104 02       		.uleb128 0x2
+ 565 0105 08       		.byte	0x8
+ 566 0106 3C       		.byte	0x3c
+ 567 0107 0B       		.uleb128 0xb
+ 568 0108 01       		.uleb128 0x1
+ 569 0109 51       		.byte	0x51
+ 570 010a 01       		.uleb128 0x1
+ 571 010b 30       		.byte	0x30
+ 572 010c 00       		.byte	0
+ 573 010d 0A       		.uleb128 0xa
+ 574 010e 18000000 		.4byte	.LVL3
+ 575 0112 A8040000 		.4byte	0x4a8
+ 576 0116 20010000 		.4byte	0x120
+ 577 011a 0B       		.uleb128 0xb
+ 578 011b 01       		.uleb128 0x1
+ 579 011c 50       		.byte	0x50
+ 580 011d 01       		.uleb128 0x1
+ 581 011e 30       		.byte	0x30
+ 582 011f 00       		.byte	0
+ 583 0120 0A       		.uleb128 0xa
+ 584 0121 20000000 		.4byte	.LVL4
+ 585 0125 A8040000 		.4byte	0x4a8
+ 586 0129 3C010000 		.4byte	0x13c
+ 587 012d 0B       		.uleb128 0xb
+ 588 012e 01       		.uleb128 0x1
+ 589 012f 50       		.byte	0x50
+ 590 0130 0A       		.uleb128 0xa
+ 591 0131 74       		.byte	0x74
+ 592 0132 00       		.sleb128 0
+ 593 0133 03       		.byte	0x3
+ 594 0134 00000000 		.4byte	.LANCHOR0
+ 595 0138 22       		.byte	0x22
+ 596 0139 94       		.byte	0x94
+ 597 013a 01       		.byte	0x1
+ 598 013b 00       		.byte	0
+ 599 013c 0C       		.uleb128 0xc
+ 600 013d 24000000 		.4byte	.LVL5
+ 601 0141 B3040000 		.4byte	0x4b3
+ 602 0145 00       		.byte	0
+ 603 0146 0C       		.uleb128 0xc
+ 604 0147 06000000 		.4byte	.LVL0
+ 605 014b BE040000 		.4byte	0x4be
+ 606 014f 00       		.byte	0
+ 607 0150 07       		.uleb128 0x7
+ 608 0151 1C000000 		.4byte	.LASF19
+ 609 0155 01       		.byte	0x1
+ 610 0156 3B       		.byte	0x3b
+ 611 0157 00000000 		.4byte	.LFB66
+ 612 015b 64000000 		.4byte	.LFE66-.LFB66
+ 613 015f 01       		.uleb128 0x1
+ 614 0160 9C       		.byte	0x9c
+ 615 0161 23020000 		.4byte	0x223
+ 616 0165 0D       		.uleb128 0xd
+ 617 0166 6300     		.ascii	"c\000"
+ 618 0168 01       		.byte	0x1
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 14
+
+
+ 619 0169 3B       		.byte	0x3b
+ 620 016a A5000000 		.4byte	0xa5
+ 621 016e 2A000000 		.4byte	.LLST1
+ 622 0172 0E       		.uleb128 0xe
+ 623 0173 00000000 		.4byte	.Ldebug_ranges0+0
+ 624 0177 0F       		.uleb128 0xf
+ 625 0178 10020000 		.4byte	.LASF38
+ 626 017c 01       		.byte	0x1
+ 627 017d 3D       		.byte	0x3d
+ 628 017e 81000000 		.4byte	0x81
+ 629 0182 10       		.uleb128 0x10
+ 630 0183 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 631 0187 D8010000 		.4byte	0x1d8
+ 632 018b 09       		.uleb128 0x9
+ 633 018c 6900     		.ascii	"i\000"
+ 634 018e 01       		.byte	0x1
+ 635 018f 40       		.byte	0x40
+ 636 0190 81000000 		.4byte	0x81
+ 637 0194 4B000000 		.4byte	.LLST2
+ 638 0198 0A       		.uleb128 0xa
+ 639 0199 14000000 		.4byte	.LVL12
+ 640 019d 9D040000 		.4byte	0x49d
+ 641 01a1 B1010000 		.4byte	0x1b1
+ 642 01a5 0B       		.uleb128 0xb
+ 643 01a6 01       		.uleb128 0x1
+ 644 01a7 50       		.byte	0x50
+ 645 01a8 02       		.uleb128 0x2
+ 646 01a9 08       		.byte	0x8
+ 647 01aa 3C       		.byte	0x3c
+ 648 01ab 0B       		.uleb128 0xb
+ 649 01ac 01       		.uleb128 0x1
+ 650 01ad 51       		.byte	0x51
+ 651 01ae 01       		.uleb128 0x1
+ 652 01af 30       		.byte	0x30
+ 653 01b0 00       		.byte	0
+ 654 01b1 0A       		.uleb128 0xa
+ 655 01b2 1A000000 		.4byte	.LVL13
+ 656 01b6 A8040000 		.4byte	0x4a8
+ 657 01ba C5010000 		.4byte	0x1c5
+ 658 01be 0B       		.uleb128 0xb
+ 659 01bf 01       		.uleb128 0x1
+ 660 01c0 50       		.byte	0x50
+ 661 01c1 02       		.uleb128 0x2
+ 662 01c2 08       		.byte	0x8
+ 663 01c3 40       		.byte	0x40
+ 664 01c4 00       		.byte	0
+ 665 01c5 0C       		.uleb128 0xc
+ 666 01c6 2A000000 		.4byte	.LVL14
+ 667 01ca A8040000 		.4byte	0x4a8
+ 668 01ce 0C       		.uleb128 0xc
+ 669 01cf 2E000000 		.4byte	.LVL15
+ 670 01d3 B3040000 		.4byte	0x4b3
+ 671 01d7 00       		.byte	0
+ 672 01d8 0A       		.uleb128 0xa
+ 673 01d9 42000000 		.4byte	.LVL20
+ 674 01dd 9D040000 		.4byte	0x49d
+ 675 01e1 F1010000 		.4byte	0x1f1
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 15
+
+
+ 676 01e5 0B       		.uleb128 0xb
+ 677 01e6 01       		.uleb128 0x1
+ 678 01e7 50       		.byte	0x50
+ 679 01e8 02       		.uleb128 0x2
+ 680 01e9 08       		.byte	0x8
+ 681 01ea 3C       		.byte	0x3c
+ 682 01eb 0B       		.uleb128 0xb
+ 683 01ec 01       		.uleb128 0x1
+ 684 01ed 51       		.byte	0x51
+ 685 01ee 01       		.uleb128 0x1
+ 686 01ef 30       		.byte	0x30
+ 687 01f0 00       		.byte	0
+ 688 01f1 0A       		.uleb128 0xa
+ 689 01f2 48000000 		.4byte	.LVL21
+ 690 01f6 A8040000 		.4byte	0x4a8
+ 691 01fa 05020000 		.4byte	0x205
+ 692 01fe 0B       		.uleb128 0xb
+ 693 01ff 01       		.uleb128 0x1
+ 694 0200 50       		.byte	0x50
+ 695 0201 02       		.uleb128 0x2
+ 696 0202 08       		.byte	0x8
+ 697 0203 40       		.byte	0x40
+ 698 0204 00       		.byte	0
+ 699 0205 0A       		.uleb128 0xa
+ 700 0206 4E000000 		.4byte	.LVL22
+ 701 020a A8040000 		.4byte	0x4a8
+ 702 020e 18020000 		.4byte	0x218
+ 703 0212 0B       		.uleb128 0xb
+ 704 0213 01       		.uleb128 0x1
+ 705 0214 50       		.byte	0x50
+ 706 0215 01       		.uleb128 0x1
+ 707 0216 30       		.byte	0x30
+ 708 0217 00       		.byte	0
+ 709 0218 0C       		.uleb128 0xc
+ 710 0219 52000000 		.4byte	.LVL23
+ 711 021d B3040000 		.4byte	0x4b3
+ 712 0221 00       		.byte	0
+ 713 0222 00       		.byte	0
+ 714 0223 07       		.uleb128 0x7
+ 715 0224 C0020000 		.4byte	.LASF20
+ 716 0228 01       		.byte	0x1
+ 717 0229 51       		.byte	0x51
+ 718 022a 00000000 		.4byte	.LFB67
+ 719 022e 14000000 		.4byte	.LFE67-.LFB67
+ 720 0232 01       		.uleb128 0x1
+ 721 0233 9C       		.byte	0x9c
+ 722 0234 51020000 		.4byte	0x251
+ 723 0238 0D       		.uleb128 0xd
+ 724 0239 73747200 		.ascii	"str\000"
+ 725 023d 01       		.byte	0x1
+ 726 023e 51       		.byte	0x51
+ 727 023f BA000000 		.4byte	0xba
+ 728 0243 74000000 		.4byte	.LLST3
+ 729 0247 0C       		.uleb128 0xc
+ 730 0248 0C000000 		.4byte	.LVL28
+ 731 024c 50010000 		.4byte	0x150
+ 732 0250 00       		.byte	0
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 16
+
+
+ 733 0251 07       		.uleb128 0x7
+ 734 0252 F5010000 		.4byte	.LASF21
+ 735 0256 01       		.byte	0x1
+ 736 0257 57       		.byte	0x57
+ 737 0258 00000000 		.4byte	.LFB68
+ 738 025c 58000000 		.4byte	.LFE68-.LFB68
+ 739 0260 01       		.uleb128 0x1
+ 740 0261 9C       		.byte	0x9c
+ 741 0262 75030000 		.4byte	0x375
+ 742 0266 0D       		.uleb128 0xd
+ 743 0267 7800     		.ascii	"x\000"
+ 744 0269 01       		.byte	0x1
+ 745 026a 57       		.byte	0x57
+ 746 026b 81000000 		.4byte	0x81
+ 747 026f 92000000 		.4byte	.LLST4
+ 748 0273 0D       		.uleb128 0xd
+ 749 0274 7900     		.ascii	"y\000"
+ 750 0276 01       		.byte	0x1
+ 751 0277 57       		.byte	0x57
+ 752 0278 81000000 		.4byte	0x81
+ 753 027c B3000000 		.4byte	.LLST5
+ 754 0280 11       		.uleb128 0x11
+ 755 0281 9F020000 		.4byte	.LASF22
+ 756 0285 01       		.byte	0x1
+ 757 0286 58       		.byte	0x58
+ 758 0287 81000000 		.4byte	0x81
+ 759 028b 01       		.uleb128 0x1
+ 760 028c 54       		.byte	0x54
+ 761 028d 11       		.uleb128 0x11
+ 762 028e 07020000 		.4byte	.LASF23
+ 763 0292 01       		.byte	0x1
+ 764 0293 58       		.byte	0x58
+ 765 0294 81000000 		.4byte	0x81
+ 766 0298 01       		.uleb128 0x1
+ 767 0299 55       		.byte	0x55
+ 768 029a 0A       		.uleb128 0xa
+ 769 029b 16000000 		.4byte	.LVL34
+ 770 029f 9D040000 		.4byte	0x49d
+ 771 02a3 B3020000 		.4byte	0x2b3
+ 772 02a7 0B       		.uleb128 0xb
+ 773 02a8 01       		.uleb128 0x1
+ 774 02a9 50       		.byte	0x50
+ 775 02aa 02       		.uleb128 0x2
+ 776 02ab 08       		.byte	0x8
+ 777 02ac 3C       		.byte	0x3c
+ 778 02ad 0B       		.uleb128 0xb
+ 779 02ae 01       		.uleb128 0x1
+ 780 02af 51       		.byte	0x51
+ 781 02b0 01       		.uleb128 0x1
+ 782 02b1 30       		.byte	0x30
+ 783 02b2 00       		.byte	0
+ 784 02b3 0A       		.uleb128 0xa
+ 785 02b4 1C000000 		.4byte	.LVL35
+ 786 02b8 A8040000 		.4byte	0x4a8
+ 787 02bc C6020000 		.4byte	0x2c6
+ 788 02c0 0B       		.uleb128 0xb
+ 789 02c1 01       		.uleb128 0x1
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 17
+
+
+ 790 02c2 50       		.byte	0x50
+ 791 02c3 01       		.uleb128 0x1
+ 792 02c4 30       		.byte	0x30
+ 793 02c5 00       		.byte	0
+ 794 02c6 0A       		.uleb128 0xa
+ 795 02c7 22000000 		.4byte	.LVL36
+ 796 02cb A8040000 		.4byte	0x4a8
+ 797 02cf DA020000 		.4byte	0x2da
+ 798 02d3 0B       		.uleb128 0xb
+ 799 02d4 01       		.uleb128 0x1
+ 800 02d5 50       		.byte	0x50
+ 801 02d6 02       		.uleb128 0x2
+ 802 02d7 74       		.byte	0x74
+ 803 02d8 00       		.sleb128 0
+ 804 02d9 00       		.byte	0
+ 805 02da 0C       		.uleb128 0xc
+ 806 02db 26000000 		.4byte	.LVL37
+ 807 02df B3040000 		.4byte	0x4b3
+ 808 02e3 0A       		.uleb128 0xa
+ 809 02e4 2E000000 		.4byte	.LVL38
+ 810 02e8 9D040000 		.4byte	0x49d
+ 811 02ec FC020000 		.4byte	0x2fc
+ 812 02f0 0B       		.uleb128 0xb
+ 813 02f1 01       		.uleb128 0x1
+ 814 02f2 50       		.byte	0x50
+ 815 02f3 02       		.uleb128 0x2
+ 816 02f4 08       		.byte	0x8
+ 817 02f5 3C       		.byte	0x3c
+ 818 02f6 0B       		.uleb128 0xb
+ 819 02f7 01       		.uleb128 0x1
+ 820 02f8 51       		.byte	0x51
+ 821 02f9 01       		.uleb128 0x1
+ 822 02fa 30       		.byte	0x30
+ 823 02fb 00       		.byte	0
+ 824 02fc 0A       		.uleb128 0xa
+ 825 02fd 34000000 		.4byte	.LVL39
+ 826 0301 A8040000 		.4byte	0x4a8
+ 827 0305 0F030000 		.4byte	0x30f
+ 828 0309 0B       		.uleb128 0xb
+ 829 030a 01       		.uleb128 0x1
+ 830 030b 50       		.byte	0x50
+ 831 030c 01       		.uleb128 0x1
+ 832 030d 30       		.byte	0x30
+ 833 030e 00       		.byte	0
+ 834 030f 0A       		.uleb128 0xa
+ 835 0310 3A000000 		.4byte	.LVL40
+ 836 0314 A8040000 		.4byte	0x4a8
+ 837 0318 23030000 		.4byte	0x323
+ 838 031c 0B       		.uleb128 0xb
+ 839 031d 01       		.uleb128 0x1
+ 840 031e 50       		.byte	0x50
+ 841 031f 02       		.uleb128 0x2
+ 842 0320 75       		.byte	0x75
+ 843 0321 00       		.sleb128 0
+ 844 0322 00       		.byte	0
+ 845 0323 0C       		.uleb128 0xc
+ 846 0324 3E000000 		.4byte	.LVL41
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 18
+
+
+ 847 0328 B3040000 		.4byte	0x4b3
+ 848 032c 0A       		.uleb128 0xa
+ 849 032d 46000000 		.4byte	.LVL42
+ 850 0331 9D040000 		.4byte	0x49d
+ 851 0335 45030000 		.4byte	0x345
+ 852 0339 0B       		.uleb128 0xb
+ 853 033a 01       		.uleb128 0x1
+ 854 033b 50       		.byte	0x50
+ 855 033c 02       		.uleb128 0x2
+ 856 033d 08       		.byte	0x8
+ 857 033e 3C       		.byte	0x3c
+ 858 033f 0B       		.uleb128 0xb
+ 859 0340 01       		.uleb128 0x1
+ 860 0341 51       		.byte	0x51
+ 861 0342 01       		.uleb128 0x1
+ 862 0343 30       		.byte	0x30
+ 863 0344 00       		.byte	0
+ 864 0345 0A       		.uleb128 0xa
+ 865 0346 4C000000 		.4byte	.LVL43
+ 866 034a A8040000 		.4byte	0x4a8
+ 867 034e 58030000 		.4byte	0x358
+ 868 0352 0B       		.uleb128 0xb
+ 869 0353 01       		.uleb128 0x1
+ 870 0354 50       		.byte	0x50
+ 871 0355 01       		.uleb128 0x1
+ 872 0356 30       		.byte	0x30
+ 873 0357 00       		.byte	0
+ 874 0358 0A       		.uleb128 0xa
+ 875 0359 52000000 		.4byte	.LVL44
+ 876 035d A8040000 		.4byte	0x4a8
+ 877 0361 6B030000 		.4byte	0x36b
+ 878 0365 0B       		.uleb128 0xb
+ 879 0366 01       		.uleb128 0x1
+ 880 0367 50       		.byte	0x50
+ 881 0368 01       		.uleb128 0x1
+ 882 0369 40       		.byte	0x40
+ 883 036a 00       		.byte	0
+ 884 036b 0C       		.uleb128 0xc
+ 885 036c 56000000 		.4byte	.LVL45
+ 886 0370 B3040000 		.4byte	0x4b3
+ 887 0374 00       		.byte	0
+ 888 0375 07       		.uleb128 0x7
+ 889 0376 6B020000 		.4byte	.LASF24
+ 890 037a 01       		.byte	0x1
+ 891 037b 2D       		.byte	0x2d
+ 892 037c 00000000 		.4byte	.LFB65
+ 893 0380 50000000 		.4byte	.LFE65-.LFB65
+ 894 0384 01       		.uleb128 0x1
+ 895 0385 9C       		.byte	0x9c
+ 896 0386 24040000 		.4byte	0x424
+ 897 038a 12       		.uleb128 0x12
+ 898 038b 02000000 		.4byte	.LBB7
+ 899 038f 3E000000 		.4byte	.LBE7-.LBB7
+ 900 0393 13       		.uleb128 0x13
+ 901 0394 00000000 		.4byte	.LASF25
+ 902 0398 01       		.byte	0x1
+ 903 0399 2E       		.byte	0x2e
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 19
+
+
+ 904 039a 81000000 		.4byte	0x81
+ 905 039e D4000000 		.4byte	.LLST6
+ 906 03a2 08       		.uleb128 0x8
+ 907 03a3 12000000 		.4byte	.LBB8
+ 908 03a7 26000000 		.4byte	.LBE8-.LBB8
+ 909 03ab 08040000 		.4byte	0x408
+ 910 03af 09       		.uleb128 0x9
+ 911 03b0 636F6C00 		.ascii	"col\000"
+ 912 03b4 01       		.byte	0x1
+ 913 03b5 30       		.byte	0x30
+ 914 03b6 81000000 		.4byte	0x81
+ 915 03ba FE000000 		.4byte	.LLST7
+ 916 03be 0A       		.uleb128 0xa
+ 917 03bf 1E000000 		.4byte	.LVL50
+ 918 03c3 9D040000 		.4byte	0x49d
+ 919 03c7 D7030000 		.4byte	0x3d7
+ 920 03cb 0B       		.uleb128 0xb
+ 921 03cc 01       		.uleb128 0x1
+ 922 03cd 50       		.byte	0x50
+ 923 03ce 02       		.uleb128 0x2
+ 924 03cf 08       		.byte	0x8
+ 925 03d0 3C       		.byte	0x3c
+ 926 03d1 0B       		.uleb128 0xb
+ 927 03d2 01       		.uleb128 0x1
+ 928 03d3 51       		.byte	0x51
+ 929 03d4 01       		.uleb128 0x1
+ 930 03d5 30       		.byte	0x30
+ 931 03d6 00       		.byte	0
+ 932 03d7 0A       		.uleb128 0xa
+ 933 03d8 24000000 		.4byte	.LVL51
+ 934 03dc A8040000 		.4byte	0x4a8
+ 935 03e0 EB030000 		.4byte	0x3eb
+ 936 03e4 0B       		.uleb128 0xb
+ 937 03e5 01       		.uleb128 0x1
+ 938 03e6 50       		.byte	0x50
+ 939 03e7 02       		.uleb128 0x2
+ 940 03e8 08       		.byte	0x8
+ 941 03e9 40       		.byte	0x40
+ 942 03ea 00       		.byte	0
+ 943 03eb 0A       		.uleb128 0xa
+ 944 03ec 2A000000 		.4byte	.LVL52
+ 945 03f0 A8040000 		.4byte	0x4a8
+ 946 03f4 FE030000 		.4byte	0x3fe
+ 947 03f8 0B       		.uleb128 0xb
+ 948 03f9 01       		.uleb128 0x1
+ 949 03fa 50       		.byte	0x50
+ 950 03fb 01       		.uleb128 0x1
+ 951 03fc 30       		.byte	0x30
+ 952 03fd 00       		.byte	0
+ 953 03fe 0C       		.uleb128 0xc
+ 954 03ff 2E000000 		.4byte	.LVL53
+ 955 0403 B3040000 		.4byte	0x4b3
+ 956 0407 00       		.byte	0
+ 957 0408 14       		.uleb128 0x14
+ 958 0409 12000000 		.4byte	.LVL48
+ 959 040d 51020000 		.4byte	0x251
+ 960 0411 0B       		.uleb128 0xb
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 20
+
+
+ 961 0412 01       		.uleb128 0x1
+ 962 0413 50       		.byte	0x50
+ 963 0414 01       		.uleb128 0x1
+ 964 0415 30       		.byte	0x30
+ 965 0416 0B       		.uleb128 0xb
+ 966 0417 01       		.uleb128 0x1
+ 967 0418 51       		.byte	0x51
+ 968 0419 07       		.uleb128 0x7
+ 969 041a 75       		.byte	0x75
+ 970 041b 00       		.sleb128 0
+ 971 041c 33       		.byte	0x33
+ 972 041d 24       		.byte	0x24
+ 973 041e 08       		.byte	0x8
+ 974 041f F8       		.byte	0xf8
+ 975 0420 1A       		.byte	0x1a
+ 976 0421 00       		.byte	0
+ 977 0422 00       		.byte	0
+ 978 0423 00       		.byte	0
+ 979 0424 15       		.uleb128 0x15
+ 980 0425 34040000 		.4byte	0x434
+ 981 0429 34040000 		.4byte	0x434
+ 982 042d 16       		.uleb128 0x16
+ 983 042e B3000000 		.4byte	0xb3
+ 984 0432 18       		.byte	0x18
+ 985 0433 00       		.byte	0
+ 986 0434 06       		.uleb128 0x6
+ 987 0435 81000000 		.4byte	0x81
+ 988 0439 11       		.uleb128 0x11
+ 989 043a 41010000 		.4byte	.LASF26
+ 990 043e 01       		.byte	0x1
+ 991 043f 0B       		.byte	0xb
+ 992 0440 4A040000 		.4byte	0x44a
+ 993 0444 05       		.uleb128 0x5
+ 994 0445 03       		.byte	0x3
+ 995 0446 00000000 		.4byte	init_commands
+ 996 044a 06       		.uleb128 0x6
+ 997 044b 24040000 		.4byte	0x424
+ 998 044f 17       		.uleb128 0x17
+ 999 0450 4F010000 		.4byte	.LASF27
+ 1000 0454 04       		.byte	0x4
+ 1001 0455 1207     		.2byte	0x712
+ 1002 0457 5B040000 		.4byte	0x45b
+ 1003 045b 18       		.uleb128 0x18
+ 1004 045c 8C000000 		.4byte	0x8c
+ 1005 0460 15       		.uleb128 0x15
+ 1006 0461 34040000 		.4byte	0x434
+ 1007 0465 6B040000 		.4byte	0x46b
+ 1008 0469 19       		.uleb128 0x19
+ 1009 046a 00       		.byte	0
+ 1010 046b 1A       		.uleb128 0x1a
+ 1011 046c 5F000000 		.4byte	.LASF28
+ 1012 0470 05       		.byte	0x5
+ 1013 0471 09       		.byte	0x9
+ 1014 0472 76040000 		.4byte	0x476
+ 1015 0476 06       		.uleb128 0x6
+ 1016 0477 60040000 		.4byte	0x460
+ 1017 047b 1B       		.uleb128 0x1b
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 21
+
+
+ 1018 047c 2F010000 		.4byte	.LASF29
+ 1019 0480 01       		.byte	0x1
+ 1020 0481 1F       		.byte	0x1f
+ 1021 0482 81000000 		.4byte	0x81
+ 1022 0486 05       		.uleb128 0x5
+ 1023 0487 03       		.byte	0x3
+ 1024 0488 00000000 		.4byte	cursor_x
+ 1025 048c 1B       		.uleb128 0x1b
+ 1026 048d 38010000 		.4byte	.LASF30
+ 1027 0491 01       		.byte	0x1
+ 1028 0492 20       		.byte	0x20
+ 1029 0493 81000000 		.4byte	0x81
+ 1030 0497 05       		.uleb128 0x5
+ 1031 0498 03       		.byte	0x3
+ 1032 0499 00000000 		.4byte	cursor_y
+ 1033 049d 1C       		.uleb128 0x1c
+ 1034 049e 38000000 		.4byte	.LASF31
+ 1035 04a2 38000000 		.4byte	.LASF31
+ 1036 04a6 06       		.byte	0x6
+ 1037 04a7 B1       		.byte	0xb1
+ 1038 04a8 1C       		.uleb128 0x1c
+ 1039 04a9 D4020000 		.4byte	.LASF32
+ 1040 04ad D4020000 		.4byte	.LASF32
+ 1041 04b1 06       		.byte	0x6
+ 1042 04b2 B6       		.byte	0xb6
+ 1043 04b3 1C       		.uleb128 0x1c
+ 1044 04b4 83020000 		.4byte	.LASF33
+ 1045 04b8 83020000 		.4byte	.LASF33
+ 1046 04bc 06       		.byte	0x6
+ 1047 04bd B5       		.byte	0xb5
+ 1048 04be 1C       		.uleb128 0x1c
+ 1049 04bf 67000000 		.4byte	.LASF34
+ 1050 04c3 67000000 		.4byte	.LASF34
+ 1051 04c7 06       		.byte	0x6
+ 1052 04c8 93       		.byte	0x93
+ 1053 04c9 00       		.byte	0
+ 1054              		.section	.debug_abbrev,"",%progbits
+ 1055              	.Ldebug_abbrev0:
+ 1056 0000 01       		.uleb128 0x1
+ 1057 0001 11       		.uleb128 0x11
+ 1058 0002 01       		.byte	0x1
+ 1059 0003 25       		.uleb128 0x25
+ 1060 0004 0E       		.uleb128 0xe
+ 1061 0005 13       		.uleb128 0x13
+ 1062 0006 0B       		.uleb128 0xb
+ 1063 0007 03       		.uleb128 0x3
+ 1064 0008 0E       		.uleb128 0xe
+ 1065 0009 1B       		.uleb128 0x1b
+ 1066 000a 0E       		.uleb128 0xe
+ 1067 000b 55       		.uleb128 0x55
+ 1068 000c 17       		.uleb128 0x17
+ 1069 000d 11       		.uleb128 0x11
+ 1070 000e 01       		.uleb128 0x1
+ 1071 000f 10       		.uleb128 0x10
+ 1072 0010 17       		.uleb128 0x17
+ 1073 0011 00       		.byte	0
+ 1074 0012 00       		.byte	0
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 22
+
+
+ 1075 0013 02       		.uleb128 0x2
+ 1076 0014 24       		.uleb128 0x24
+ 1077 0015 00       		.byte	0
+ 1078 0016 0B       		.uleb128 0xb
+ 1079 0017 0B       		.uleb128 0xb
+ 1080 0018 3E       		.uleb128 0x3e
+ 1081 0019 0B       		.uleb128 0xb
+ 1082 001a 03       		.uleb128 0x3
+ 1083 001b 0E       		.uleb128 0xe
+ 1084 001c 00       		.byte	0
+ 1085 001d 00       		.byte	0
+ 1086 001e 03       		.uleb128 0x3
+ 1087 001f 16       		.uleb128 0x16
+ 1088 0020 00       		.byte	0
+ 1089 0021 03       		.uleb128 0x3
+ 1090 0022 0E       		.uleb128 0xe
+ 1091 0023 3A       		.uleb128 0x3a
+ 1092 0024 0B       		.uleb128 0xb
+ 1093 0025 3B       		.uleb128 0x3b
+ 1094 0026 0B       		.uleb128 0xb
+ 1095 0027 49       		.uleb128 0x49
+ 1096 0028 13       		.uleb128 0x13
+ 1097 0029 00       		.byte	0
+ 1098 002a 00       		.byte	0
+ 1099 002b 04       		.uleb128 0x4
+ 1100 002c 24       		.uleb128 0x24
+ 1101 002d 00       		.byte	0
+ 1102 002e 0B       		.uleb128 0xb
+ 1103 002f 0B       		.uleb128 0xb
+ 1104 0030 3E       		.uleb128 0x3e
+ 1105 0031 0B       		.uleb128 0xb
+ 1106 0032 03       		.uleb128 0x3
+ 1107 0033 08       		.uleb128 0x8
+ 1108 0034 00       		.byte	0
+ 1109 0035 00       		.byte	0
+ 1110 0036 05       		.uleb128 0x5
+ 1111 0037 0F       		.uleb128 0xf
+ 1112 0038 00       		.byte	0
+ 1113 0039 0B       		.uleb128 0xb
+ 1114 003a 0B       		.uleb128 0xb
+ 1115 003b 49       		.uleb128 0x49
+ 1116 003c 13       		.uleb128 0x13
+ 1117 003d 00       		.byte	0
+ 1118 003e 00       		.byte	0
+ 1119 003f 06       		.uleb128 0x6
+ 1120 0040 26       		.uleb128 0x26
+ 1121 0041 00       		.byte	0
+ 1122 0042 49       		.uleb128 0x49
+ 1123 0043 13       		.uleb128 0x13
+ 1124 0044 00       		.byte	0
+ 1125 0045 00       		.byte	0
+ 1126 0046 07       		.uleb128 0x7
+ 1127 0047 2E       		.uleb128 0x2e
+ 1128 0048 01       		.byte	0x1
+ 1129 0049 3F       		.uleb128 0x3f
+ 1130 004a 19       		.uleb128 0x19
+ 1131 004b 03       		.uleb128 0x3
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 23
+
+
+ 1132 004c 0E       		.uleb128 0xe
+ 1133 004d 3A       		.uleb128 0x3a
+ 1134 004e 0B       		.uleb128 0xb
+ 1135 004f 3B       		.uleb128 0x3b
+ 1136 0050 0B       		.uleb128 0xb
+ 1137 0051 27       		.uleb128 0x27
+ 1138 0052 19       		.uleb128 0x19
+ 1139 0053 11       		.uleb128 0x11
+ 1140 0054 01       		.uleb128 0x1
+ 1141 0055 12       		.uleb128 0x12
+ 1142 0056 06       		.uleb128 0x6
+ 1143 0057 40       		.uleb128 0x40
+ 1144 0058 18       		.uleb128 0x18
+ 1145 0059 9742     		.uleb128 0x2117
+ 1146 005b 19       		.uleb128 0x19
+ 1147 005c 01       		.uleb128 0x1
+ 1148 005d 13       		.uleb128 0x13
+ 1149 005e 00       		.byte	0
+ 1150 005f 00       		.byte	0
+ 1151 0060 08       		.uleb128 0x8
+ 1152 0061 0B       		.uleb128 0xb
+ 1153 0062 01       		.byte	0x1
+ 1154 0063 11       		.uleb128 0x11
+ 1155 0064 01       		.uleb128 0x1
+ 1156 0065 12       		.uleb128 0x12
+ 1157 0066 06       		.uleb128 0x6
+ 1158 0067 01       		.uleb128 0x1
+ 1159 0068 13       		.uleb128 0x13
+ 1160 0069 00       		.byte	0
+ 1161 006a 00       		.byte	0
+ 1162 006b 09       		.uleb128 0x9
+ 1163 006c 34       		.uleb128 0x34
+ 1164 006d 00       		.byte	0
+ 1165 006e 03       		.uleb128 0x3
+ 1166 006f 08       		.uleb128 0x8
+ 1167 0070 3A       		.uleb128 0x3a
+ 1168 0071 0B       		.uleb128 0xb
+ 1169 0072 3B       		.uleb128 0x3b
+ 1170 0073 0B       		.uleb128 0xb
+ 1171 0074 49       		.uleb128 0x49
+ 1172 0075 13       		.uleb128 0x13
+ 1173 0076 02       		.uleb128 0x2
+ 1174 0077 17       		.uleb128 0x17
+ 1175 0078 00       		.byte	0
+ 1176 0079 00       		.byte	0
+ 1177 007a 0A       		.uleb128 0xa
+ 1178 007b 898201   		.uleb128 0x4109
+ 1179 007e 01       		.byte	0x1
+ 1180 007f 11       		.uleb128 0x11
+ 1181 0080 01       		.uleb128 0x1
+ 1182 0081 31       		.uleb128 0x31
+ 1183 0082 13       		.uleb128 0x13
+ 1184 0083 01       		.uleb128 0x1
+ 1185 0084 13       		.uleb128 0x13
+ 1186 0085 00       		.byte	0
+ 1187 0086 00       		.byte	0
+ 1188 0087 0B       		.uleb128 0xb
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 24
+
+
+ 1189 0088 8A8201   		.uleb128 0x410a
+ 1190 008b 00       		.byte	0
+ 1191 008c 02       		.uleb128 0x2
+ 1192 008d 18       		.uleb128 0x18
+ 1193 008e 9142     		.uleb128 0x2111
+ 1194 0090 18       		.uleb128 0x18
+ 1195 0091 00       		.byte	0
+ 1196 0092 00       		.byte	0
+ 1197 0093 0C       		.uleb128 0xc
+ 1198 0094 898201   		.uleb128 0x4109
+ 1199 0097 00       		.byte	0
+ 1200 0098 11       		.uleb128 0x11
+ 1201 0099 01       		.uleb128 0x1
+ 1202 009a 31       		.uleb128 0x31
+ 1203 009b 13       		.uleb128 0x13
+ 1204 009c 00       		.byte	0
+ 1205 009d 00       		.byte	0
+ 1206 009e 0D       		.uleb128 0xd
+ 1207 009f 05       		.uleb128 0x5
+ 1208 00a0 00       		.byte	0
+ 1209 00a1 03       		.uleb128 0x3
+ 1210 00a2 08       		.uleb128 0x8
+ 1211 00a3 3A       		.uleb128 0x3a
+ 1212 00a4 0B       		.uleb128 0xb
+ 1213 00a5 3B       		.uleb128 0x3b
+ 1214 00a6 0B       		.uleb128 0xb
+ 1215 00a7 49       		.uleb128 0x49
+ 1216 00a8 13       		.uleb128 0x13
+ 1217 00a9 02       		.uleb128 0x2
+ 1218 00aa 17       		.uleb128 0x17
+ 1219 00ab 00       		.byte	0
+ 1220 00ac 00       		.byte	0
+ 1221 00ad 0E       		.uleb128 0xe
+ 1222 00ae 0B       		.uleb128 0xb
+ 1223 00af 01       		.byte	0x1
+ 1224 00b0 55       		.uleb128 0x55
+ 1225 00b1 17       		.uleb128 0x17
+ 1226 00b2 00       		.byte	0
+ 1227 00b3 00       		.byte	0
+ 1228 00b4 0F       		.uleb128 0xf
+ 1229 00b5 34       		.uleb128 0x34
+ 1230 00b6 00       		.byte	0
+ 1231 00b7 03       		.uleb128 0x3
+ 1232 00b8 0E       		.uleb128 0xe
+ 1233 00b9 3A       		.uleb128 0x3a
+ 1234 00ba 0B       		.uleb128 0xb
+ 1235 00bb 3B       		.uleb128 0x3b
+ 1236 00bc 0B       		.uleb128 0xb
+ 1237 00bd 49       		.uleb128 0x49
+ 1238 00be 13       		.uleb128 0x13
+ 1239 00bf 00       		.byte	0
+ 1240 00c0 00       		.byte	0
+ 1241 00c1 10       		.uleb128 0x10
+ 1242 00c2 0B       		.uleb128 0xb
+ 1243 00c3 01       		.byte	0x1
+ 1244 00c4 55       		.uleb128 0x55
+ 1245 00c5 17       		.uleb128 0x17
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 25
+
+
+ 1246 00c6 01       		.uleb128 0x1
+ 1247 00c7 13       		.uleb128 0x13
+ 1248 00c8 00       		.byte	0
+ 1249 00c9 00       		.byte	0
+ 1250 00ca 11       		.uleb128 0x11
+ 1251 00cb 34       		.uleb128 0x34
+ 1252 00cc 00       		.byte	0
+ 1253 00cd 03       		.uleb128 0x3
+ 1254 00ce 0E       		.uleb128 0xe
+ 1255 00cf 3A       		.uleb128 0x3a
+ 1256 00d0 0B       		.uleb128 0xb
+ 1257 00d1 3B       		.uleb128 0x3b
+ 1258 00d2 0B       		.uleb128 0xb
+ 1259 00d3 49       		.uleb128 0x49
+ 1260 00d4 13       		.uleb128 0x13
+ 1261 00d5 02       		.uleb128 0x2
+ 1262 00d6 18       		.uleb128 0x18
+ 1263 00d7 00       		.byte	0
+ 1264 00d8 00       		.byte	0
+ 1265 00d9 12       		.uleb128 0x12
+ 1266 00da 0B       		.uleb128 0xb
+ 1267 00db 01       		.byte	0x1
+ 1268 00dc 11       		.uleb128 0x11
+ 1269 00dd 01       		.uleb128 0x1
+ 1270 00de 12       		.uleb128 0x12
+ 1271 00df 06       		.uleb128 0x6
+ 1272 00e0 00       		.byte	0
+ 1273 00e1 00       		.byte	0
+ 1274 00e2 13       		.uleb128 0x13
+ 1275 00e3 34       		.uleb128 0x34
+ 1276 00e4 00       		.byte	0
+ 1277 00e5 03       		.uleb128 0x3
+ 1278 00e6 0E       		.uleb128 0xe
+ 1279 00e7 3A       		.uleb128 0x3a
+ 1280 00e8 0B       		.uleb128 0xb
+ 1281 00e9 3B       		.uleb128 0x3b
+ 1282 00ea 0B       		.uleb128 0xb
+ 1283 00eb 49       		.uleb128 0x49
+ 1284 00ec 13       		.uleb128 0x13
+ 1285 00ed 02       		.uleb128 0x2
+ 1286 00ee 17       		.uleb128 0x17
+ 1287 00ef 00       		.byte	0
+ 1288 00f0 00       		.byte	0
+ 1289 00f1 14       		.uleb128 0x14
+ 1290 00f2 898201   		.uleb128 0x4109
+ 1291 00f5 01       		.byte	0x1
+ 1292 00f6 11       		.uleb128 0x11
+ 1293 00f7 01       		.uleb128 0x1
+ 1294 00f8 31       		.uleb128 0x31
+ 1295 00f9 13       		.uleb128 0x13
+ 1296 00fa 00       		.byte	0
+ 1297 00fb 00       		.byte	0
+ 1298 00fc 15       		.uleb128 0x15
+ 1299 00fd 01       		.uleb128 0x1
+ 1300 00fe 01       		.byte	0x1
+ 1301 00ff 49       		.uleb128 0x49
+ 1302 0100 13       		.uleb128 0x13
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 26
+
+
+ 1303 0101 01       		.uleb128 0x1
+ 1304 0102 13       		.uleb128 0x13
+ 1305 0103 00       		.byte	0
+ 1306 0104 00       		.byte	0
+ 1307 0105 16       		.uleb128 0x16
+ 1308 0106 21       		.uleb128 0x21
+ 1309 0107 00       		.byte	0
+ 1310 0108 49       		.uleb128 0x49
+ 1311 0109 13       		.uleb128 0x13
+ 1312 010a 2F       		.uleb128 0x2f
+ 1313 010b 0B       		.uleb128 0xb
+ 1314 010c 00       		.byte	0
+ 1315 010d 00       		.byte	0
+ 1316 010e 17       		.uleb128 0x17
+ 1317 010f 34       		.uleb128 0x34
+ 1318 0110 00       		.byte	0
+ 1319 0111 03       		.uleb128 0x3
+ 1320 0112 0E       		.uleb128 0xe
+ 1321 0113 3A       		.uleb128 0x3a
+ 1322 0114 0B       		.uleb128 0xb
+ 1323 0115 3B       		.uleb128 0x3b
+ 1324 0116 05       		.uleb128 0x5
+ 1325 0117 49       		.uleb128 0x49
+ 1326 0118 13       		.uleb128 0x13
+ 1327 0119 3F       		.uleb128 0x3f
+ 1328 011a 19       		.uleb128 0x19
+ 1329 011b 3C       		.uleb128 0x3c
+ 1330 011c 19       		.uleb128 0x19
+ 1331 011d 00       		.byte	0
+ 1332 011e 00       		.byte	0
+ 1333 011f 18       		.uleb128 0x18
+ 1334 0120 35       		.uleb128 0x35
+ 1335 0121 00       		.byte	0
+ 1336 0122 49       		.uleb128 0x49
+ 1337 0123 13       		.uleb128 0x13
+ 1338 0124 00       		.byte	0
+ 1339 0125 00       		.byte	0
+ 1340 0126 19       		.uleb128 0x19
+ 1341 0127 21       		.uleb128 0x21
+ 1342 0128 00       		.byte	0
+ 1343 0129 00       		.byte	0
+ 1344 012a 00       		.byte	0
+ 1345 012b 1A       		.uleb128 0x1a
+ 1346 012c 34       		.uleb128 0x34
+ 1347 012d 00       		.byte	0
+ 1348 012e 03       		.uleb128 0x3
+ 1349 012f 0E       		.uleb128 0xe
+ 1350 0130 3A       		.uleb128 0x3a
+ 1351 0131 0B       		.uleb128 0xb
+ 1352 0132 3B       		.uleb128 0x3b
+ 1353 0133 0B       		.uleb128 0xb
+ 1354 0134 49       		.uleb128 0x49
+ 1355 0135 13       		.uleb128 0x13
+ 1356 0136 3F       		.uleb128 0x3f
+ 1357 0137 19       		.uleb128 0x19
+ 1358 0138 3C       		.uleb128 0x3c
+ 1359 0139 19       		.uleb128 0x19
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 27
+
+
+ 1360 013a 00       		.byte	0
+ 1361 013b 00       		.byte	0
+ 1362 013c 1B       		.uleb128 0x1b
+ 1363 013d 34       		.uleb128 0x34
+ 1364 013e 00       		.byte	0
+ 1365 013f 03       		.uleb128 0x3
+ 1366 0140 0E       		.uleb128 0xe
+ 1367 0141 3A       		.uleb128 0x3a
+ 1368 0142 0B       		.uleb128 0xb
+ 1369 0143 3B       		.uleb128 0x3b
+ 1370 0144 0B       		.uleb128 0xb
+ 1371 0145 49       		.uleb128 0x49
+ 1372 0146 13       		.uleb128 0x13
+ 1373 0147 3F       		.uleb128 0x3f
+ 1374 0148 19       		.uleb128 0x19
+ 1375 0149 02       		.uleb128 0x2
+ 1376 014a 18       		.uleb128 0x18
+ 1377 014b 00       		.byte	0
+ 1378 014c 00       		.byte	0
+ 1379 014d 1C       		.uleb128 0x1c
+ 1380 014e 2E       		.uleb128 0x2e
+ 1381 014f 00       		.byte	0
+ 1382 0150 3F       		.uleb128 0x3f
+ 1383 0151 19       		.uleb128 0x19
+ 1384 0152 3C       		.uleb128 0x3c
+ 1385 0153 19       		.uleb128 0x19
+ 1386 0154 6E       		.uleb128 0x6e
+ 1387 0155 0E       		.uleb128 0xe
+ 1388 0156 03       		.uleb128 0x3
+ 1389 0157 0E       		.uleb128 0xe
+ 1390 0158 3A       		.uleb128 0x3a
+ 1391 0159 0B       		.uleb128 0xb
+ 1392 015a 3B       		.uleb128 0x3b
+ 1393 015b 0B       		.uleb128 0xb
+ 1394 015c 00       		.byte	0
+ 1395 015d 00       		.byte	0
+ 1396 015e 00       		.byte	0
+ 1397              		.section	.debug_loc,"",%progbits
+ 1398              	.Ldebug_loc0:
+ 1399              	.LLST0:
+ 1400 0000 06000000 		.4byte	.LVL0
+ 1401 0004 0A000000 		.4byte	.LVL1
+ 1402 0008 0200     		.2byte	0x2
+ 1403 000a 30       		.byte	0x30
+ 1404 000b 9F       		.byte	0x9f
+ 1405 000c 0A000000 		.4byte	.LVL1
+ 1406 0010 26000000 		.4byte	.LVL6
+ 1407 0014 0100     		.2byte	0x1
+ 1408 0016 54       		.byte	0x54
+ 1409 0017 28000000 		.4byte	.LVL7
+ 1410 001b 2E000000 		.4byte	.LVL8
+ 1411 001f 0100     		.2byte	0x1
+ 1412 0021 54       		.byte	0x54
+ 1413 0022 00000000 		.4byte	0
+ 1414 0026 00000000 		.4byte	0
+ 1415              	.LLST1:
+ 1416 002a 00000000 		.4byte	.LVL9
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 28
+
+
+ 1417 002e 04000000 		.4byte	.LVL10
+ 1418 0032 0100     		.2byte	0x1
+ 1419 0034 50       		.byte	0x50
+ 1420 0035 04000000 		.4byte	.LVL10
+ 1421 0039 64000000 		.4byte	.LFE66
+ 1422 003d 0400     		.2byte	0x4
+ 1423 003f F3       		.byte	0xf3
+ 1424 0040 01       		.uleb128 0x1
+ 1425 0041 50       		.byte	0x50
+ 1426 0042 9F       		.byte	0x9f
+ 1427 0043 00000000 		.4byte	0
+ 1428 0047 00000000 		.4byte	0
+ 1429              	.LLST2:
+ 1430 004b 0C000000 		.4byte	.LVL11
+ 1431 004f 30000000 		.4byte	.LVL16
+ 1432 0053 0100     		.2byte	0x1
+ 1433 0055 54       		.byte	0x54
+ 1434 0056 32000000 		.4byte	.LVL17
+ 1435 005a 34000000 		.4byte	.LVL18
+ 1436 005e 0100     		.2byte	0x1
+ 1437 0060 54       		.byte	0x54
+ 1438 0061 36000000 		.4byte	.LVL19
+ 1439 0065 5C000000 		.4byte	.LVL24
+ 1440 0069 0100     		.2byte	0x1
+ 1441 006b 54       		.byte	0x54
+ 1442 006c 00000000 		.4byte	0
+ 1443 0070 00000000 		.4byte	0
+ 1444              	.LLST3:
+ 1445 0074 00000000 		.4byte	.LVL25
+ 1446 0078 06000000 		.4byte	.LVL26
+ 1447 007c 0100     		.2byte	0x1
+ 1448 007e 50       		.byte	0x50
+ 1449 007f 06000000 		.4byte	.LVL26
+ 1450 0083 14000000 		.4byte	.LFE67
+ 1451 0087 0100     		.2byte	0x1
+ 1452 0089 54       		.byte	0x54
+ 1453 008a 00000000 		.4byte	0
+ 1454 008e 00000000 		.4byte	0
+ 1455              	.LLST4:
+ 1456 0092 00000000 		.4byte	.LVL29
+ 1457 0096 12000000 		.4byte	.LVL33
+ 1458 009a 0100     		.2byte	0x1
+ 1459 009c 50       		.byte	0x50
+ 1460 009d 12000000 		.4byte	.LVL33
+ 1461 00a1 58000000 		.4byte	.LFE68
+ 1462 00a5 0400     		.2byte	0x4
+ 1463 00a7 F3       		.byte	0xf3
+ 1464 00a8 01       		.uleb128 0x1
+ 1465 00a9 50       		.byte	0x50
+ 1466 00aa 9F       		.byte	0x9f
+ 1467 00ab 00000000 		.4byte	0
+ 1468 00af 00000000 		.4byte	0
+ 1469              	.LLST5:
+ 1470 00b3 00000000 		.4byte	.LVL29
+ 1471 00b7 04000000 		.4byte	.LVL30
+ 1472 00bb 0100     		.2byte	0x1
+ 1473 00bd 51       		.byte	0x51
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 29
+
+
+ 1474 00be 04000000 		.4byte	.LVL30
+ 1475 00c2 58000000 		.4byte	.LFE68
+ 1476 00c6 0400     		.2byte	0x4
+ 1477 00c8 F3       		.byte	0xf3
+ 1478 00c9 01       		.uleb128 0x1
+ 1479 00ca 51       		.byte	0x51
+ 1480 00cb 9F       		.byte	0x9f
+ 1481 00cc 00000000 		.4byte	0
+ 1482 00d0 00000000 		.4byte	0
+ 1483              	.LLST6:
+ 1484 00d4 02000000 		.4byte	.LVL46
+ 1485 00d8 06000000 		.4byte	.LVL47
+ 1486 00dc 0200     		.2byte	0x2
+ 1487 00de 30       		.byte	0x30
+ 1488 00df 9F       		.byte	0x9f
+ 1489 00e0 06000000 		.4byte	.LVL47
+ 1490 00e4 3A000000 		.4byte	.LVL56
+ 1491 00e8 0100     		.2byte	0x1
+ 1492 00ea 55       		.byte	0x55
+ 1493 00eb 3C000000 		.4byte	.LVL57
+ 1494 00ef 4A000000 		.4byte	.LVL58
+ 1495 00f3 0100     		.2byte	0x1
+ 1496 00f5 55       		.byte	0x55
+ 1497 00f6 00000000 		.4byte	0
+ 1498 00fa 00000000 		.4byte	0
+ 1499              	.LLST7:
+ 1500 00fe 12000000 		.4byte	.LVL48
+ 1501 0102 16000000 		.4byte	.LVL49
+ 1502 0106 0200     		.2byte	0x2
+ 1503 0108 30       		.byte	0x30
+ 1504 0109 9F       		.byte	0x9f
+ 1505 010a 16000000 		.4byte	.LVL49
+ 1506 010e 30000000 		.4byte	.LVL54
+ 1507 0112 0100     		.2byte	0x1
+ 1508 0114 54       		.byte	0x54
+ 1509 0115 32000000 		.4byte	.LVL55
+ 1510 0119 3C000000 		.4byte	.LVL57
+ 1511 011d 0100     		.2byte	0x1
+ 1512 011f 54       		.byte	0x54
+ 1513 0120 00000000 		.4byte	0
+ 1514 0124 00000000 		.4byte	0
+ 1515              		.section	.debug_aranges,"",%progbits
+ 1516 0000 3C000000 		.4byte	0x3c
+ 1517 0004 0200     		.2byte	0x2
+ 1518 0006 00000000 		.4byte	.Ldebug_info0
+ 1519 000a 04       		.byte	0x4
+ 1520 000b 00       		.byte	0
+ 1521 000c 0000     		.2byte	0
+ 1522 000e 0000     		.2byte	0
+ 1523 0010 00000000 		.4byte	.LFB64
+ 1524 0014 34000000 		.4byte	.LFE64-.LFB64
+ 1525 0018 00000000 		.4byte	.LFB66
+ 1526 001c 64000000 		.4byte	.LFE66-.LFB66
+ 1527 0020 00000000 		.4byte	.LFB67
+ 1528 0024 14000000 		.4byte	.LFE67-.LFB67
+ 1529 0028 00000000 		.4byte	.LFB68
+ 1530 002c 58000000 		.4byte	.LFE68-.LFB68
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 30
+
+
+ 1531 0030 00000000 		.4byte	.LFB65
+ 1532 0034 50000000 		.4byte	.LFE65-.LFB65
+ 1533 0038 00000000 		.4byte	0
+ 1534 003c 00000000 		.4byte	0
+ 1535              		.section	.debug_ranges,"",%progbits
+ 1536              	.Ldebug_ranges0:
+ 1537 0000 0C000000 		.4byte	.LBB3
+ 1538 0004 34000000 		.4byte	.LBE3
+ 1539 0008 36000000 		.4byte	.LBB6
+ 1540 000c 64000000 		.4byte	.LBE6
+ 1541 0010 00000000 		.4byte	0
+ 1542 0014 00000000 		.4byte	0
+ 1543 0018 0C000000 		.4byte	.LBB4
+ 1544 001c 34000000 		.4byte	.LBE4
+ 1545 0020 36000000 		.4byte	.LBB5
+ 1546 0024 3A000000 		.4byte	.LBE5
+ 1547 0028 00000000 		.4byte	0
+ 1548 002c 00000000 		.4byte	0
+ 1549 0030 00000000 		.4byte	.LFB64
+ 1550 0034 34000000 		.4byte	.LFE64
+ 1551 0038 00000000 		.4byte	.LFB66
+ 1552 003c 64000000 		.4byte	.LFE66
+ 1553 0040 00000000 		.4byte	.LFB67
+ 1554 0044 14000000 		.4byte	.LFE67
+ 1555 0048 00000000 		.4byte	.LFB68
+ 1556 004c 58000000 		.4byte	.LFE68
+ 1557 0050 00000000 		.4byte	.LFB65
+ 1558 0054 50000000 		.4byte	.LFE65
+ 1559 0058 00000000 		.4byte	0
+ 1560 005c 00000000 		.4byte	0
+ 1561              		.section	.debug_line,"",%progbits
+ 1562              	.Ldebug_line0:
+ 1563 0000 39020000 		.section	.debug_str,"MS",%progbits,1
+ 1563      02005801 
+ 1563      00000201 
+ 1563      FB0E0D00 
+ 1563      01010101 
+ 1564              	.LASF25:
+ 1565 0000 70616765 		.ascii	"page\000"
+ 1565      00
+ 1566              	.LASF18:
+ 1567 0005 53534431 		.ascii	"SSD1306_Init\000"
+ 1567      3330365F 
+ 1567      496E6974 
+ 1567      00
+ 1568              	.LASF4:
+ 1569 0012 5F5F7569 		.ascii	"__uint8_t\000"
+ 1569      6E74385F 
+ 1569      7400
+ 1570              	.LASF19:
+ 1571 001c 53534431 		.ascii	"SSD1306_WriteChar\000"
+ 1571      3330365F 
+ 1571      57726974 
+ 1571      65436861 
+ 1571      7200
+ 1572              	.LASF5:
+ 1573 002e 5F5F696E 		.ascii	"__int32_t\000"
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 31
+
+
+ 1573      7433325F 
+ 1573      7400
+ 1574              	.LASF31:
+ 1575 0038 4932435F 		.ascii	"I2C_MasterSendStart\000"
+ 1575      4D617374 
+ 1575      65725365 
+ 1575      6E645374 
+ 1575      61727400 
+ 1576              	.LASF3:
+ 1577 004c 73686F72 		.ascii	"short unsigned int\000"
+ 1577      7420756E 
+ 1577      7369676E 
+ 1577      65642069 
+ 1577      6E7400
+ 1578              	.LASF28:
+ 1579 005f 666F6E74 		.ascii	"font6x8\000"
+ 1579      36783800 
+ 1580              	.LASF34:
+ 1581 0067 4932435F 		.ascii	"I2C_Start\000"
+ 1581      53746172 
+ 1581      7400
+ 1582              	.LASF36:
+ 1583 0071 53534431 		.ascii	"SSD1306.c\000"
+ 1583      3330362E 
+ 1583      6300
+ 1584              	.LASF13:
+ 1585 007b 666C6F61 		.ascii	"float\000"
+ 1585      7400
+ 1586              	.LASF1:
+ 1587 0081 756E7369 		.ascii	"unsigned char\000"
+ 1587      676E6564 
+ 1587      20636861 
+ 1587      7200
+ 1588              	.LASF35:
+ 1589 008f 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1589      43313120 
+ 1589      352E342E 
+ 1589      31203230 
+ 1589      31363036 
+ 1590 00c2 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 1590      20726576 
+ 1590      6973696F 
+ 1590      6E203233 
+ 1590      37373135 
+ 1591 00f5 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1591      66756E63 
+ 1591      74696F6E 
+ 1591      2D736563 
+ 1591      74696F6E 
+ 1592              	.LASF7:
+ 1593 011d 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1593      20756E73 
+ 1593      69676E65 
+ 1593      6420696E 
+ 1593      7400
+ 1594              	.LASF29:
+ 1595 012f 63757273 		.ascii	"cursor_x\000"
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 32
+
+
+ 1595      6F725F78 
+ 1595      00
+ 1596              	.LASF30:
+ 1597 0138 63757273 		.ascii	"cursor_y\000"
+ 1597      6F725F79 
+ 1597      00
+ 1598              	.LASF26:
+ 1599 0141 696E6974 		.ascii	"init_commands\000"
+ 1599      5F636F6D 
+ 1599      6D616E64 
+ 1599      7300
+ 1600              	.LASF27:
+ 1601 014f 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1601      52784275 
+ 1601      66666572 
+ 1601      00
+ 1602              	.LASF14:
+ 1603 015c 646F7562 		.ascii	"double\000"
+ 1603      6C6500
+ 1604              	.LASF37:
+ 1605 0163 433A5C55 		.ascii	"C:\\Users\\nicol\\Documents\\PSoC Creator\\CE195277"
+ 1605      73657273 
+ 1605      5C6E6963 
+ 1605      6F6C5C44 
+ 1605      6F63756D 
+ 1606 0191 5F414443 		.ascii	"_ADC_and_UART\\CE195352_PSoC_5LP_Blinking_LED\\CE19"
+ 1606      5F616E64 
+ 1606      5F554152 
+ 1606      545C4345 
+ 1606      31393533 
+ 1607 01c2 35333532 		.ascii	"5352_PSoC_5LP_Blinking_LED\\LED_TEST\\Design01.cyds"
+ 1607      5F50536F 
+ 1607      435F354C 
+ 1607      505F426C 
+ 1607      696E6B69 
+ 1608 01f3 6E00     		.ascii	"n\000"
+ 1609              	.LASF21:
+ 1610 01f5 53534431 		.ascii	"SSD1306_SetCursor\000"
+ 1610      3330365F 
+ 1610      53657443 
+ 1610      7572736F 
+ 1610      7200
+ 1611              	.LASF23:
+ 1612 0207 636F6D6D 		.ascii	"command2\000"
+ 1612      616E6432 
+ 1612      00
+ 1613              	.LASF38:
+ 1614 0210 666F6E74 		.ascii	"font_index\000"
+ 1614      5F696E64 
+ 1614      657800
+ 1615              	.LASF10:
+ 1616 021b 756E7369 		.ascii	"unsigned int\000"
+ 1616      676E6564 
+ 1616      20696E74 
+ 1616      00
+ 1617              	.LASF9:
+ 1618 0228 6C6F6E67 		.ascii	"long long unsigned int\000"
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 33
+
+
+ 1618      206C6F6E 
+ 1618      6720756E 
+ 1618      7369676E 
+ 1618      65642069 
+ 1619              	.LASF11:
+ 1620 023f 75696E74 		.ascii	"uint8_t\000"
+ 1620      385F7400 
+ 1621              	.LASF12:
+ 1622 0247 696E7433 		.ascii	"int32_t\000"
+ 1622      325F7400 
+ 1623              	.LASF17:
+ 1624 024f 73697A65 		.ascii	"sizetype\000"
+ 1624      74797065 
+ 1624      00
+ 1625              	.LASF8:
+ 1626 0258 6C6F6E67 		.ascii	"long long int\000"
+ 1626      206C6F6E 
+ 1626      6720696E 
+ 1626      7400
+ 1627              	.LASF15:
+ 1628 0266 63686172 		.ascii	"char\000"
+ 1628      00
+ 1629              	.LASF24:
+ 1630 026b 53534431 		.ascii	"SSD1306_Clear\000"
+ 1630      3330365F 
+ 1630      436C6561 
+ 1630      7200
+ 1631              	.LASF2:
+ 1632 0279 73686F72 		.ascii	"short int\000"
+ 1632      7420696E 
+ 1632      7400
+ 1633              	.LASF33:
+ 1634 0283 4932435F 		.ascii	"I2C_MasterSendStop\000"
+ 1634      4D617374 
+ 1634      65725365 
+ 1634      6E645374 
+ 1634      6F7000
+ 1635              	.LASF6:
+ 1636 0296 6C6F6E67 		.ascii	"long int\000"
+ 1636      20696E74 
+ 1636      00
+ 1637              	.LASF22:
+ 1638 029f 636F6D6D 		.ascii	"command1\000"
+ 1638      616E6431 
+ 1638      00
+ 1639              	.LASF16:
+ 1640 02a8 6C6F6E67 		.ascii	"long double\000"
+ 1640      20646F75 
+ 1640      626C6500 
+ 1641              	.LASF0:
+ 1642 02b4 7369676E 		.ascii	"signed char\000"
+ 1642      65642063 
+ 1642      68617200 
+ 1643              	.LASF20:
+ 1644 02c0 53534431 		.ascii	"SSD1306_WriteString\000"
+ 1644      3330365F 
+ 1644      57726974 
+ARM GAS  C:\Users\nicol\AppData\Local\Temp\ccWBhrQ6.s 			page 34
+
+
+ 1644      65537472 
+ 1644      696E6700 
+ 1645              	.LASF32:
+ 1646 02d4 4932435F 		.ascii	"I2C_MasterWriteByte\000"
+ 1646      4D617374 
+ 1646      65725772 
+ 1646      69746542 
+ 1646      79746500 
+ 1647              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

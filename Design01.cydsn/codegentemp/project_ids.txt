@@ -1,0 +1,6 @@
+C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\Design01.cyprj|25f4a5dc-2811-4dba-975e-f3a854d23f96
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|1a18723c-7f8c-48aa-b6c5-733026126b31
+C:\Users\nicol\Documents\PSoC Creator\4.4\Downloads ( 4.4).cylib\Downloads ( 4.4).cyprj|eb15904a-4d72-4c02-92b6-53c3237854f9
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|82456dae-b2a4-4400-b10f-55354a194d30
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|f54b11f1-9530-4936-8794-6237bd77c112
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|df290f12-9e0b-4bc2-8e66-d9b865019f36

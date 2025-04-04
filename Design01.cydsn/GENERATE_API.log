@@ -1,0 +1,11 @@
+--------------- Build Started: 03/31/2025 12:52:55 Project: Design01, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+cydsfit.exe -.appdatapath "C:\Users\nicol\AppData\Local\Cypress Semiconductor\PSoC Creator\4.4" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p "C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\Design01.cyprj" -d CY8C5888LTI-LP097 -s "C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\Generated_Source\PSoC5" -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
+Elaborating Design...
+ADD: sdb.M0025: error: No input on Instance "DIRECCION", terminal "y_0".
+ * C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\TopDesign\TopDesign.cysch (Signal: Net_264)
+ * C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\TopDesign\TopDesign.cysch (Shape_154.4)
+ADD: sdb.M0050: error: Terminal "y_0" requires connection when it is visible.
+ * C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\TopDesign\TopDesign.cysch (Signal: Net_264)
+ * C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\TopDesign\TopDesign.cysch (Shape_154.4)
+Error: fit.M0050: The fitter aborted due to errors, please address all errors and rebuild. (App=cydsfit)
+--------------- Build Failed: 03/31/2025 12:52:57 ---------------
