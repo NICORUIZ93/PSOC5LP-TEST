@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="LED_TEST\Design01\Source Files\L298N\L298N.h">
 <ExpandedNodeIds>
 <v>LED_TEST</v>
 <v>LED_TEST\Design01</v>
@@ -115,6 +115,7 @@
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_PM.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_theACLK.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Clock.lst</v>
+<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Clock_1.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
@@ -139,11 +140,12 @@
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\L298N.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\led_blue.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\MOTOR.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Opamp.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Opamp_PM.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM_PM.lst</v>
+<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM1.lst</v>
+<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM1_PM.lst</v>
+<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM2.lst</v>
+<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM2_PM.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\SCL_1.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\SDA_1.lst</v>
 <v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\SENSOR.lst</v>
@@ -164,40 +166,6 @@
 <VisibleNodeIds>
 <v>LED_TEST</v>
 <v>LED_TEST\Design01</v>
-<v>LED_TEST\Design01\CortexM3</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_AMux.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_Ext_CP_Clk.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_INT.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_IRQ.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_PM.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_theACLK.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Clock.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\DIRECCION.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\font8x8.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_BOOT.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_INT.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_MASTER.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_PM.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_SLAVE.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\IN3.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\IN4.lst</v>
-<v>LED_TEST\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\L298N.lst</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
@@ -214,13 +182,15 @@
 <v>LED_TEST\Design01\System Reference Guides</v>
 <v>LED_TEST\Design01\System Reference Guides\cy_boot_v6_10</v>
 <v>LED_TEST\Design01\ADC_DelSig_v3_30.pdf</v>
-<v>LED_TEST\Design01\cy_clock_v2_20.pdf</v>
+<v>LED_TEST\Design01\cy_clock_v2_20</v>
+<v>LED_TEST\Design01\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
 <v>LED_TEST\Design01\cy_pins_v2_20</v>
 <v>LED_TEST\Design01\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
 <v>LED_TEST\Design01\Gnd_v1_0.pdf</v>
 <v>LED_TEST\Design01\I2C_v3_50.pdf</v>
 <v>LED_TEST\Design01\OpAmp_v1_90.pdf</v>
-<v>LED_TEST\Design01\PWM_v3_30.pdf</v>
+<v>LED_TEST\Design01\PWM_v3_30</v>
+<v>LED_TEST\Design01\PWM_v3_30\PWM_v3_30.pdf</v>
 <v>LED_TEST\Design01\SwitchSPST_v1_0.pdf</v>
 <v>LED_TEST\Design01\UART_v2_50.pdf</v>
 </ExpandedNodeIds>
@@ -232,13 +202,15 @@
 <v>LED_TEST\Design01\System Reference Guides</v>
 <v>LED_TEST\Design01\System Reference Guides\cy_boot_v6_10</v>
 <v>LED_TEST\Design01\ADC_DelSig_v3_30.pdf</v>
-<v>LED_TEST\Design01\cy_clock_v2_20.pdf</v>
+<v>LED_TEST\Design01\cy_clock_v2_20</v>
+<v>LED_TEST\Design01\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
 <v>LED_TEST\Design01\cy_pins_v2_20</v>
 <v>LED_TEST\Design01\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
 <v>LED_TEST\Design01\Gnd_v1_0.pdf</v>
 <v>LED_TEST\Design01\I2C_v3_50.pdf</v>
 <v>LED_TEST\Design01\OpAmp_v1_90.pdf</v>
-<v>LED_TEST\Design01\PWM_v3_30.pdf</v>
+<v>LED_TEST\Design01\PWM_v3_30</v>
+<v>LED_TEST\Design01\PWM_v3_30\PWM_v3_30.pdf</v>
 <v>LED_TEST\Design01\SwitchSPST_v1_0.pdf</v>
 <v>LED_TEST\Design01\UART_v2_50.pdf</v>
 </VisibleNodeIds>
@@ -258,6 +230,8 @@
 <name v=".\Design01.cydsn\main.c" />
 <name v=".\Design01.cydsn\Design01.cydwr" />
 <name v=".\Design01.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\Design01.cydsn\L298N.c" />
+<name v=".\Design01.cydsn\SSD1306.c" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -265,7 +239,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="995, 445" SelectedTabbedMdiWindow="dfae032b-9530-4e9c-8af8-b665977d9868"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="27559530-2db6-40ad-bd40-7a4eefac600b" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\main.c" Guid="dfae032b-9530-4e9c-8af8-b665977d9868" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\Design01.cydwr" Guid="9736da63-f2c5-40d8-85da-24e5a0fb5222" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\TopDesign\TopDesign.cysch" Guid="f24cdd6e-d1f1-4507-bece-68c257ee8266" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="993, 456" SelectedTabbedMdiWindow="dfae032b-9530-4e9c-8af8-b665977d9868"><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\main.c" Guid="dfae032b-9530-4e9c-8af8-b665977d9868" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\Design01.cydwr" Guid="9736da63-f2c5-40d8-85da-24e5a0fb5222" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\TopDesign\TopDesign.cysch" Guid="f24cdd6e-d1f1-4507-bece-68c257ee8266" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\L298N.c" Guid="b3333617-ffff-4ac6-a79b-e80344f336c7" /><DocumentWindow Key="C:\Users\nicol\Documents\PSoC Creator\CE195277_ADC_and_UART\CE195352_PSoC_5LP_Blinking_LED\CE195352_PSoC_5LP_Blinking_LED\LED_TEST\Design01.cydsn\SSD1306.c" Guid="77ec687f-3e7d-4cb3-a6dd-adaf971bbc8f" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

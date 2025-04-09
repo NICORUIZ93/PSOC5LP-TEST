@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 void L298N_Init(void);
-void L298N_Forward(void);
-void L298N_Backward(void);
+void L298N_Forward(uint8_t pwm_value);
+void L298N_Backward(uint8_t pwm_value);
 void L298N_Stop(void);
 
 #endif /* L298N_H */

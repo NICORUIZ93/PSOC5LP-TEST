@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: PWM_PM.c
+* File Name: PWM1_PM.c
 * Version 3.30
 *
 * Description:
@@ -15,13 +15,13 @@
 * the software package with which this file was provided.
 *******************************************************************************/
 
-#include "PWM.h"
+#include "PWM1.h"
 
-static PWM_backupStruct PWM_backup;
+static PWM1_backupStruct PWM1_backup;
 
 
 /*******************************************************************************
-* Function Name: PWM_SaveConfig
+* Function Name: PWM1_SaveConfig
 ********************************************************************************
 *
 * Summary:
@@ -34,41 +34,41 @@ static PWM_backupStruct PWM_backup;
 *  None
 *
 * Global variables:
-*  PWM_backup:  Variables of this global structure are modified to
+*  PWM1_backup:  Variables of this global structure are modified to
 *  store the values of non retention configuration registers when Sleep() API is
 *  called.
 *
 *******************************************************************************/
-void PWM_SaveConfig(void) 
+void PWM1_SaveConfig(void) 
 {
 
-    #if(!PWM_UsingFixedFunction)
-        #if(!PWM_PWMModeIsCenterAligned)
-            PWM_backup.PWMPeriod = PWM_ReadPeriod();
-        #endif /* (!PWM_PWMModeIsCenterAligned) */
-        PWM_backup.PWMUdb = PWM_ReadCounter();
-        #if (PWM_UseStatus)
-            PWM_backup.InterruptMaskValue = PWM_STATUS_MASK;
-        #endif /* (PWM_UseStatus) */
+    #if(!PWM1_UsingFixedFunction)
+        #if(!PWM1_PWMModeIsCenterAligned)
+            PWM1_backup.PWMPeriod = PWM1_ReadPeriod();
+        #endif /* (!PWM1_PWMModeIsCenterAligned) */
+        PWM1_backup.PWMUdb = PWM1_ReadCounter();
+        #if (PWM1_UseStatus)
+            PWM1_backup.InterruptMaskValue = PWM1_STATUS_MASK;
+        #endif /* (PWM1_UseStatus) */
 
-        #if(PWM_DeadBandMode == PWM__B_PWM__DBM_256_CLOCKS || \
-            PWM_DeadBandMode == PWM__B_PWM__DBM_2_4_CLOCKS)
-            PWM_backup.PWMdeadBandValue = PWM_ReadDeadTime();
+        #if(PWM1_DeadBandMode == PWM1__B_PWM__DBM_256_CLOCKS || \
+            PWM1_DeadBandMode == PWM1__B_PWM__DBM_2_4_CLOCKS)
+            PWM1_backup.PWMdeadBandValue = PWM1_ReadDeadTime();
         #endif /*  deadband count is either 2-4 clocks or 256 clocks */
 
-        #if(PWM_KillModeMinTime)
-             PWM_backup.PWMKillCounterPeriod = PWM_ReadKillTime();
-        #endif /* (PWM_KillModeMinTime) */
+        #if(PWM1_KillModeMinTime)
+             PWM1_backup.PWMKillCounterPeriod = PWM1_ReadKillTime();
+        #endif /* (PWM1_KillModeMinTime) */
 
-        #if(PWM_UseControl)
-            PWM_backup.PWMControlRegister = PWM_ReadControlRegister();
-        #endif /* (PWM_UseControl) */
-    #endif  /* (!PWM_UsingFixedFunction) */
+        #if(PWM1_UseControl)
+            PWM1_backup.PWMControlRegister = PWM1_ReadControlRegister();
+        #endif /* (PWM1_UseControl) */
+    #endif  /* (!PWM1_UsingFixedFunction) */
 }
 
 
 /*******************************************************************************
-* Function Name: PWM_RestoreConfig
+* Function Name: PWM1_RestoreConfig
 ********************************************************************************
 *
 * Summary:
@@ -81,41 +81,41 @@ void PWM_SaveConfig(void)
 *  None
 *
 * Global variables:
-*  PWM_backup:  Variables of this global structure are used to
+*  PWM1_backup:  Variables of this global structure are used to
 *  restore the values of non retention registers on wakeup from sleep mode.
 *
 *******************************************************************************/
-void PWM_RestoreConfig(void) 
+void PWM1_RestoreConfig(void) 
 {
-        #if(!PWM_UsingFixedFunction)
-            #if(!PWM_PWMModeIsCenterAligned)
-                PWM_WritePeriod(PWM_backup.PWMPeriod);
-            #endif /* (!PWM_PWMModeIsCenterAligned) */
+        #if(!PWM1_UsingFixedFunction)
+            #if(!PWM1_PWMModeIsCenterAligned)
+                PWM1_WritePeriod(PWM1_backup.PWMPeriod);
+            #endif /* (!PWM1_PWMModeIsCenterAligned) */
 
-            PWM_WriteCounter(PWM_backup.PWMUdb);
+            PWM1_WriteCounter(PWM1_backup.PWMUdb);
 
-            #if (PWM_UseStatus)
-                PWM_STATUS_MASK = PWM_backup.InterruptMaskValue;
-            #endif /* (PWM_UseStatus) */
+            #if (PWM1_UseStatus)
+                PWM1_STATUS_MASK = PWM1_backup.InterruptMaskValue;
+            #endif /* (PWM1_UseStatus) */
 
-            #if(PWM_DeadBandMode == PWM__B_PWM__DBM_256_CLOCKS || \
-                PWM_DeadBandMode == PWM__B_PWM__DBM_2_4_CLOCKS)
-                PWM_WriteDeadTime(PWM_backup.PWMdeadBandValue);
+            #if(PWM1_DeadBandMode == PWM1__B_PWM__DBM_256_CLOCKS || \
+                PWM1_DeadBandMode == PWM1__B_PWM__DBM_2_4_CLOCKS)
+                PWM1_WriteDeadTime(PWM1_backup.PWMdeadBandValue);
             #endif /* deadband count is either 2-4 clocks or 256 clocks */
 
-            #if(PWM_KillModeMinTime)
-                PWM_WriteKillTime(PWM_backup.PWMKillCounterPeriod);
-            #endif /* (PWM_KillModeMinTime) */
+            #if(PWM1_KillModeMinTime)
+                PWM1_WriteKillTime(PWM1_backup.PWMKillCounterPeriod);
+            #endif /* (PWM1_KillModeMinTime) */
 
-            #if(PWM_UseControl)
-                PWM_WriteControlRegister(PWM_backup.PWMControlRegister);
-            #endif /* (PWM_UseControl) */
-        #endif  /* (!PWM_UsingFixedFunction) */
+            #if(PWM1_UseControl)
+                PWM1_WriteControlRegister(PWM1_backup.PWMControlRegister);
+            #endif /* (PWM1_UseControl) */
+        #endif  /* (!PWM1_UsingFixedFunction) */
     }
 
 
 /*******************************************************************************
-* Function Name: PWM_Sleep
+* Function Name: PWM1_Sleep
 ********************************************************************************
 *
 * Summary:
@@ -129,35 +129,35 @@ void PWM_RestoreConfig(void)
 *  None
 *
 * Global variables:
-*  PWM_backup.PWMEnableState:  Is modified depending on the enable
+*  PWM1_backup.PWMEnableState:  Is modified depending on the enable
 *  state of the block before entering sleep mode.
 *
 *******************************************************************************/
-void PWM_Sleep(void) 
+void PWM1_Sleep(void) 
 {
-    #if(PWM_UseControl)
-        if(PWM_CTRL_ENABLE == (PWM_CONTROL & PWM_CTRL_ENABLE))
+    #if(PWM1_UseControl)
+        if(PWM1_CTRL_ENABLE == (PWM1_CONTROL & PWM1_CTRL_ENABLE))
         {
             /*Component is enabled */
-            PWM_backup.PWMEnableState = 1u;
+            PWM1_backup.PWMEnableState = 1u;
         }
         else
         {
             /* Component is disabled */
-            PWM_backup.PWMEnableState = 0u;
+            PWM1_backup.PWMEnableState = 0u;
         }
-    #endif /* (PWM_UseControl) */
+    #endif /* (PWM1_UseControl) */
 
     /* Stop component */
-    PWM_Stop();
+    PWM1_Stop();
 
     /* Save registers configuration */
-    PWM_SaveConfig();
+    PWM1_SaveConfig();
 }
 
 
 /*******************************************************************************
-* Function Name: PWM_Wakeup
+* Function Name: PWM1_Wakeup
 ********************************************************************************
 *
 * Summary:
@@ -171,19 +171,19 @@ void PWM_Sleep(void)
 *  None
 *
 * Global variables:
-*  PWM_backup.pwmEnable:  Is used to restore the enable state of
+*  PWM1_backup.pwmEnable:  Is used to restore the enable state of
 *  block on wakeup from sleep mode.
 *
 *******************************************************************************/
-void PWM_Wakeup(void) 
+void PWM1_Wakeup(void) 
 {
      /* Restore registers values */
-    PWM_RestoreConfig();
+    PWM1_RestoreConfig();
 
-    if(PWM_backup.PWMEnableState != 0u)
+    if(PWM1_backup.PWMEnableState != 0u)
     {
         /* Enable component's operation */
-        PWM_Enable();
+        PWM1_Enable();
     } /* Do nothing if component's block was disabled before */
 
 }

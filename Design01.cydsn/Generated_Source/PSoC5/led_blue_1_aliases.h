@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: MOTOR.h  
+* File Name: led_blue_1.h  
 * Version 2.20
 *
 * Description:
@@ -15,8 +15,8 @@
 * the software package with which this file was provided.
 *******************************************************************************/
 
-#if !defined(CY_PINS_MOTOR_ALIASES_H) /* Pins MOTOR_ALIASES_H */
-#define CY_PINS_MOTOR_ALIASES_H
+#if !defined(CY_PINS_led_blue_1_ALIASES_H) /* Pins led_blue_1_ALIASES_H */
+#define CY_PINS_led_blue_1_ALIASES_H
 
 #include "cytypes.h"
 #include "cyfitter.h"
@@ -25,12 +25,12 @@
 /***************************************
 *              Constants        
 ***************************************/
-#define MOTOR_0			(MOTOR__0__PC)
-#define MOTOR_0_INTR	((uint16)((uint16)0x0001u << MOTOR__0__SHIFT))
+#define led_blue_1_0			(led_blue_1__0__PC)
+#define led_blue_1_0_INTR	((uint16)((uint16)0x0001u << led_blue_1__0__SHIFT))
 
-#define MOTOR_INTR_ALL	 ((uint16)(MOTOR_0_INTR))
+#define led_blue_1_INTR_ALL	 ((uint16)(led_blue_1_0_INTR))
 
-#endif /* End Pins MOTOR_ALIASES_H */
+#endif /* End Pins led_blue_1_ALIASES_H */
 
 
 /* [] END OF FILE */
